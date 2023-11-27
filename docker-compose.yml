@@ -21,6 +21,7 @@ services:
     build: ./business_logic/registration
     restart: always
     environment:
+      - EVA_ADAPTER_SERVER_PORT
       - DB_ADAPTER_SERVER_PORT
       - REGISTRATION_SERVICE_PORT
     ports:
@@ -29,6 +30,7 @@ services:
       - ${REGISTRATION_SERVICE_PORT}
     depends_on:
       - db_adapter
+      - eva_adapter
 
   # Adapters
   oauth_adapter:
@@ -44,6 +46,16 @@ services:
       - ${OAUTH_SERVER_PORT}:${OAUTH_SERVER_PORT}
     expose:
       - ${OAUTH_SERVER_PORT}
+
+  eva_adapter:
+    build: ./adapter/eva_api
+    restart: always
+    environment:
+      - EVA_ADAPTER_SERVER_PORT
+    ports:
+      - ${EVA_ADAPTER_SERVER_PORT}:${EVA_ADAPTER_SERVER_PORT}
+    expose:
+      - ${EVA_ADAPTER_SERVER_PORT}
 
   db_adapter:
     build: ./adapter/database_interface
