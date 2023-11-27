@@ -61,6 +61,8 @@ app.post('/login', async (req, res) => {
 
 });
 
+
+
 // Start the server
 const PORT = process.env.LOGIN_SERVICE_PORT || 3000;
 app.listen(PORT, () => {

@@ -75,6 +75,56 @@ app.get('/findUser', (req, res) => {
   
 });
 
+app.post('/registerUser', async (req, res) => {
+  const { name, surname, email, password } = req.body;
+
+  // Validation for required fields
+  if (!name || !surname || !email || !password) {
+    return res.status(400).json({
+      status: 'error',
+      msg: 'All fields (name, surname, email, password) are required for registration',
+    });
+  }
+
+  // Check if the email is already registered
+  const checkEmailQuery = `SELECT * FROM users WHERE email="${email}";`;
+  pool.query(checkEmailQuery, (err, data) => {
+    if (err) {
+      return res.status(400).json({
+        status: "error",
+        msg: err
+      });
+    }
+
+    if (data.length > 0) {
+      return res.status(400).json({
+        status: 'error',
+        msg: 'Email is already registered',
+      });
+    }
+
+    // Insert the new user into the database
+    let insertQuery = `INSERT INTO users (name, surname, email, password) VALUES( "${name}", "${surname}", "${email}", "${password}" );`;
+    pool.query(insertQuery, (err) => {
+      if (err) {
+        return res.status(400).json({
+          status: "error",
+          msg: err
+        });
+      }
+
+      // user registered
+      res.status(200).json({
+        status: "success",
+        msg: "User registered"
+      });
+    });
+    
+  });
+
+});
+
+
 // Start the server
 const PORT = process.env.DB_ADAPTER_SERVER_PORT || 3000;
 app.listen(PORT, () => {
