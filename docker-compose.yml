@@ -17,6 +17,19 @@ services:
       - db_adapter
       - oauth_adapter
 
+  registration:
+    build: ./business_logic/registration
+    restart: always
+    environment:
+      - DB_ADAPTER_SERVER_PORT
+      - REGISTRATION_SERVICE_PORT
+    ports:
+      - ${REGISTRATION_SERVICE_PORT}:${REGISTRATION_SERVICE_PORT}
+    expose:
+      - ${REGISTRATION_SERVICE_PORT}
+    depends_on:
+      - db_adapter
+
   # Adapters
   oauth_adapter:
     build: ./adapter/google_oauth
