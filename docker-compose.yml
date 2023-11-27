@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  oauth_adapter:
+    build: ./adapter/google_oauth
+    restart: always
+    environment:
+      - EXPRESS_SESSION_SECRET
+      - GOOGLE_CLIENT_ID
+      - GOOGLE_CLIENT_SECRET
+      - GOOGLE_CALLBACK_URL
+    ports:
+      - 3000:3000
