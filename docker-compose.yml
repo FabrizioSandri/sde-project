@@ -1,5 +1,23 @@
 version: "3.8"
 services:
+
+  # Business logic
+  login:
+    build: ./business_logic/login
+    restart: always
+    environment:
+      - DB_ADAPTER_SERVER_PORT
+      - JWT_SECRET
+      - LOGIN_SERVICE_PORT
+    ports:
+      - ${LOGIN_SERVICE_PORT}:${LOGIN_SERVICE_PORT}
+    expose:
+      - ${LOGIN_SERVICE_PORT}
+    depends_on:
+      - db_adapter
+      - oauth_adapter
+
+  # Adapters
   oauth_adapter:
     build: ./adapter/google_oauth
     restart: always
@@ -8,5 +26,42 @@ services:
       - GOOGLE_CLIENT_ID
       - GOOGLE_CLIENT_SECRET
       - GOOGLE_CALLBACK_URL
+      - OAUTH_SERVER_PORT
     ports:
-      - 3000:3000
+      - ${OAUTH_SERVER_PORT}:${OAUTH_SERVER_PORT}
+    expose:
+      - ${OAUTH_SERVER_PORT}
+
+  db_adapter:
+    build: ./adapter/database_interface
+    restart: always
+    environment:
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - DB_PORT
+      - DB_ADAPTER_SERVER_PORT
+    ports:
+      - ${DB_ADAPTER_SERVER_PORT}:${DB_ADAPTER_SERVER_PORT}
+    expose:
+      - ${DB_ADAPTER_SERVER_PORT}
+    depends_on:
+      - database
+
+  # Data layer
+  database:
+    image: mysql
+    restart: always
+    environment:
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_ROOT_PASSWORD
+    expose:
+      - ${DB_PORT}
+    volumes:
+      - ./adapter/database_interface/mysql-dump/users.sql:/docker-entrypoint-initdb.d/users.sql
+      - persistent-db:/var/lib/mysql
+
+volumes:
+  persistent-db:

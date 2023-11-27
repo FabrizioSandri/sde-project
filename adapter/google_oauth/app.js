@@ -71,7 +71,6 @@ app.get('/getUserData', isAuthenticated, (req, res) => {
   res.json(data);
 });
 
-
 app.get('/isAuthenticated', (req, res) => {
   data = {
     authenticated : req.isAuthenticated()
@@ -94,7 +93,7 @@ function isAuthenticated(req, res, next) {
 }
 
 // Start the server
-const PORT = process.env.NODE_PORT || 3000;
+const PORT = process.env.OAUTH_SERVER_PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
