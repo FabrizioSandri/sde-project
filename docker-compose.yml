@@ -1,6 +1,27 @@
 version: "3.8"
 services:
 
+  # Process centric
+  authentication:
+    build: ./process_centric/authentication
+    restart: always
+    environment:
+      - LOGIN_SERVICE_PORT
+      - REGISTRATION_SERVICE_PORT
+      - EXPRESS_SESSION_SECRET
+      - GOOGLE_CLIENT_ID
+      - GOOGLE_CLIENT_SECRET
+      - GOOGLE_CALLBACK_URL
+      - AUTHENTICATION_SERVER_PORT
+    ports:
+      - ${AUTHENTICATION_SERVER_PORT}:${AUTHENTICATION_SERVER_PORT}
+    expose:
+      - ${AUTHENTICATION_SERVER_PORT}
+    depends_on:
+      - login
+      - registration
+
+
   # Business logic
   login:
     build: ./business_logic/login
@@ -15,7 +36,6 @@ services:
       - ${LOGIN_SERVICE_PORT}
     depends_on:
       - db_adapter
-      - oauth_adapter
 
   registration:
     build: ./business_logic/registration
@@ -32,20 +52,6 @@ services:
       - db_adapter
       - eva_adapter
 
-  # Adapters
-  oauth_adapter:
-    build: ./adapter/google_oauth
-    restart: always
-    environment:
-      - EXPRESS_SESSION_SECRET
-      - GOOGLE_CLIENT_ID
-      - GOOGLE_CLIENT_SECRET
-      - GOOGLE_CALLBACK_URL
-      - OAUTH_SERVER_PORT
-    ports:
-      - ${OAUTH_SERVER_PORT}:${OAUTH_SERVER_PORT}
-    expose:
-      - ${OAUTH_SERVER_PORT}
 
   eva_adapter:
     build: ./adapter/eva_api

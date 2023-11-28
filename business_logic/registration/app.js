@@ -46,7 +46,7 @@ app.post('/registration', async (req, res) => {
   } catch (error) {
     return res.status(400).json({
       status: "error",
-      msg: error
+      msg: error.toString()
     });
   }
 
@@ -71,7 +71,7 @@ app.post('/registration', async (req, res) => {
   } catch (error) {
     return res.status(400).json({
       status: "error",
-      msg: error
+      msg: error.toString()
     });
   }
 

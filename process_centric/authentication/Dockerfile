@@ -1,8 +1,7 @@
 FROM node
 
 WORKDIR /app
-COPY package.json .
-COPY app.js .
+COPY . .
 
 RUN npm install
 CMD node app.js
