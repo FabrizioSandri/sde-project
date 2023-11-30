@@ -1,4 +1,5 @@
 const passport = require('./passport').passport;
+const jwt = require('jsonwebtoken');
 
 module.exports.authenticate = passport.authenticate('google', {
   scope: ['email', 'profile']
@@ -9,29 +10,16 @@ module.exports.callback = passport.authenticate('google', {
 });
 
 module.exports.afterLogin = (req, res) => {
-  res.redirect('/google/getUserData');
+
+  // Generate JWT token
+  const token = jwt.sign({ email: req.user.emails[0].value }, process.env.JWT_SECRET);
+  return res.status(200).json({
+    status: "success",
+    msg: "User login successful",
+    token: token
+  });
+
 }
-
-module.exports.getUserData = async (req, res) => {
-  data = {
-    displayName : req.user.displayName,
-    name: req.user.name.givenName,
-    surname: req.user.name.familyName,
-    email: req.user.emails[0].value
-  };
-  
-  res.status(200).json({
-    status: "success",
-    data: data
-  });
-};
-
-module.exports.isAuthenticated = async (req, res) => {
-  res.status(200).json({
-    status: "success",
-    authenticated : req.isAuthenticated()
-  });
-};
 
 module.exports.logout = async (req, res) => {
   req.logout();
@@ -39,6 +27,5 @@ module.exports.logout = async (req, res) => {
     status: "success"
   });
 };
-
 
 module.exports.passport = passport;

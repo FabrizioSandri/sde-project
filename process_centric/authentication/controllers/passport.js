@@ -9,14 +9,10 @@ module.exports.initializePassport = function (app) {
 
   // Serialize and deserialize user for session management
   passport.serializeUser((user, done) => {
-    console.log("SERIALIZE")
-    console.log(user)
     done(null, user);
   });
 
   passport.deserializeUser((obj, done) => {
-    console.log("DESERIALIZE")
-    console.log(obj)
     done(null, obj);
   });
 

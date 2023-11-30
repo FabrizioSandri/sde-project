@@ -3,11 +3,13 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const router = require('./routes/routes');
 const passport = require('./controllers/passport')
+const cookieParser = require("cookie-parser");
 
 const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Use session to track login state
 app.use(session({ secret: process.env.EXPRESS_SESSION_SECRET, resave: true, saveUninitialized: true }));
