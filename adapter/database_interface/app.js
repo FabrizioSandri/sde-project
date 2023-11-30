@@ -124,6 +124,89 @@ app.post('/registerUser', async (req, res) => {
 
 });
 
+//==========================Football interests mangers==========================
+
+app.post('/addTeam', async (req, res) => {
+  const {userId, leagueId, teamId} = req.body;
+
+  if (!userId || !leagueId || !teamId){
+    return res.status(400).json({
+      status: "error",
+      msg: "some parameter are invalid"
+    });
+  }
+  let addTeamQuery=`INSERT INTO followedTeams (userId, leagueId, teamId) VALUES( "${userId}", "${leagueId}", "${teamId}");`;
+
+  pool.query(addTeamQuery, (err) => {
+    if (err) {
+      return res.status(400).json({
+        status: "error",
+        msg: err
+      });
+    }
+
+    // team added
+    res.status(200).json({
+      status: "success",
+      msg: "team added"
+    });
+  });
+  
+})
+
+app.delete('/removeTeam', async (req, res) => {
+  
+  const userId = req.body.userId;
+  const teamId = req.body.teamId;
+
+  if (!userId || !teamId){
+    return res.status(400).json({
+      status: "error",
+      msg: "some parameter are invalid"
+    });
+  }
+  let deleteTeamQuery=`DELETE FROM followedTeams WHERE userId=${userId} AND teamID=${teamId}`;
+
+  pool.query(deleteTeamQuery, (err) => {
+    if (err) {
+      return res.status(400).json({
+        status: "error",
+        msg: err
+      });
+    }
+
+    // team deleted
+    res.status(200).json({
+      status: "success",
+      msg: "team deleted"
+    });
+  });
+})
+
+app.get('/getTeams', async (req, res) => {
+  const userId = req.query.userId;
+  if (!userId){
+    return res.status(400).json({
+      status: "error",
+      msg: "user id not valid"
+    });
+  }
+  let getTeamsQuery=`SELECT * FROM followedTeams WHERE userId=${userId}`;
+  
+  pool.query(getTeamsQuery,(error, result)=>{
+    if (error){
+      return res.status(400).json({
+        status: "error",
+        msg: error 
+      })
+    } 
+    res.status(200).json({
+      status: "success",
+      msg_result: result,
+    });
+  })
+})
+
 
 // Start the server
 const PORT = process.env.DB_ADAPTER_SERVER_PORT || 3000;
