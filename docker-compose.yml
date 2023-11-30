@@ -53,7 +53,6 @@ services:
       - db_adapter
       - eva_adapter
 
-
   eva_adapter:
     build: ./adapter/eva_api
     restart: always
@@ -79,6 +78,32 @@ services:
       - ${DB_ADAPTER_SERVER_PORT}
     depends_on:
       - database
+
+  rss_adapter:
+    build: ./adapter/rss_feed
+    restart: always
+    environment:
+      - RSS_ADAPTER_SERVER_PORT
+    ports:
+      - ${RSS_ADAPTER_SERVER_PORT}:${RSS_ADAPTER_SERVER_PORT}
+    expose:
+      - ${RSS_ADAPTER_SERVER_PORT}
+    # flask requires SIGINT to stop gracefully
+    # (default stop signal from Compose is SIGTERM)
+    stop_signal: SIGINT
+
+  html_adapter:
+    build: ./adapter/html_adapter
+    restart: always
+    environment:
+      - HTML_ADAPTER_SERVER_PORT
+    ports:
+      - ${HTML_ADAPTER_SERVER_PORT}:${HTML_ADAPTER_SERVER_PORT}
+    expose:
+      - ${HTML_ADAPTER_SERVER_PORT}
+    # flask requires SIGINT to stop gracefully
+    # (default stop signal from Compose is SIGTERM)
+    stop_signal: SIGINT
 
   # Data layer
   database:
