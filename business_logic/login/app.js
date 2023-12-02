@@ -52,7 +52,10 @@ app.post('/login', async (req, res) => {
   }
 
   // Generate JWT token
-  const token = jwt.sign({ email: user.user_info.email }, process.env.JWT_SECRET);
+  const token = jwt.sign({ 
+    id: user.user_info.id, 
+    email: user.user_info.email 
+  }, process.env.JWT_SECRET);
   return res.status(200).json({
     status: "success",
     msg: "User login successful",

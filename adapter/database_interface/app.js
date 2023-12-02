@@ -43,7 +43,7 @@ app.get('/findUser', (req, res) => {
     });
   }
   
-  let query = `SELECT * FROM users WHERE email="${email}" AND password="${password}";`;
+  let query = `SELECT * FROM users WHERE email="${email}" AND password=SHA1("${password}");`;
   pool.query(query, (err, data) => {
     if (err){
       return res.status(400).json({
@@ -65,6 +65,7 @@ app.get('/findUser', (req, res) => {
       status: "success",
       msg: "User found",
       user_info: {
+        id: data[0].id,
         name: data[0].name,
         surname: data[0].surname,
         email: data[0].email,
@@ -100,12 +101,13 @@ app.post('/registerUser', async (req, res) => {
       return res.status(400).json({
         status: 'error',
         msg: 'Email is already registered',
+        id: data[0].id
       });
     }
 
     // Insert the new user into the database
-    let insertQuery = `INSERT INTO users (name, surname, email, password) VALUES( "${name}", "${surname}", "${email}", "${password}" );`;
-    pool.query(insertQuery, (err) => {
+    let insertQuery = `INSERT INTO users (name, surname, email, password) VALUES( "${name}", "${surname}", "${email}", SHA1("${password}") );`;
+    pool.query(insertQuery, (err, result) => {
       if (err) {
         return res.status(400).json({
           status: "error",
@@ -116,7 +118,8 @@ app.post('/registerUser', async (req, res) => {
       // user registered
       res.status(200).json({
         status: "success",
-        msg: "User registered"
+        msg: "User registered",
+        id: result.insertId
       });
     });
     
