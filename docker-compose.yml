@@ -22,6 +22,21 @@ services:
       - login
       - registration
 
+  football_matches:
+    build: ./process_centric/football_matches
+    restart: always
+    environment:
+      - FOOTBALL_SERVICE_PORT
+      - DB_ADAPTER_SERVER_PORT
+      - FOOTBALLMATCHES_SERVER_PORT
+    ports:
+      - ${FOOTBALLMATCHES_SERVER_PORT}:${FOOTBALLMATCHES_SERVER_PORT}
+    expose:
+      - ${FOOTBALLMATCHES_SERVER_PORT}
+    depends_on:
+      - db_adapter
+      - football
+      - place_forecast
 
   # Business logic
   login:
@@ -53,6 +68,34 @@ services:
       - db_adapter
       - eva_adapter
 
+  football:
+    build: ./business_logic/football
+    restart: always
+    environment:
+      - FOOTBALL_ADAPTER_SERVER_PORT
+      - FOOTBALL_SERVICE_PORT
+    ports:
+      - ${FOOTBALL_SERVICE_PORT}:${FOOTBALL_SERVICE_PORT}
+    expose:
+      - ${FOOTBALL_SERVICE_PORT}
+    depends_on:
+      - football_adapter
+
+  place_forecast:
+    build: ./business_logic/place_forecast
+    restart: always
+    environment:
+      - WEATHER_ADAPTER_SERVER_PORT
+      - POSITIONSTACK_ADAPTER_SERVER_PORT
+    ports:
+      - ${PLACEFORECAST_SERVICE_PORT}:${PLACEFORECAST_SERVICE_PORT}
+    expose:
+      - ${PLACEFORECAST_SERVICE_PORT}
+    depends_on:
+      - weather_adapter
+      - positionstack_adapter
+
+# Adapter logic
   eva_adapter:
     build: ./adapter/eva_api
     restart: always
@@ -104,6 +147,40 @@ services:
     # flask requires SIGINT to stop gracefully
     # (default stop signal from Compose is SIGTERM)
     stop_signal: SIGINT
+
+  weather_adapter:
+    build: ./adapter/weather_api
+    restart: always
+    environment: 
+      - WEATHER_ADAPTER_SERVER_PORT
+      - X_RAPIDAPI_KEY
+    ports:
+      - ${WEATHER_ADAPTER_SERVER_PORT}:${WEATHER_ADAPTER_SERVER_PORT}
+    expose:
+      - ${WEATHER_ADAPTER_SERVER_PORT}
+
+  positionstack_adapter:
+    build: ./adapter/positionstack_api
+    restart: always
+    environment: 
+      - POSITIONSTACK_ADAPTER_SERVER_PORT
+      - STACKPOSITZION_ACCESSKEY
+    ports:
+      - ${POSITIONSTACK_ADAPTER_SERVER_PORT}:${POSITIONSTACK_ADAPTER_SERVER_PORT}
+    expose:
+      - ${POSITIONSTACK_ADAPTER_SERVER_PORT}
+
+  football_adapter:
+    build: ./adapter/football_api
+    restart: always
+    environment: 
+      - FOOTBALL_ADAPTER_SERVER_PORT
+      - X_RAPIDAPI_KEY
+    ports:
+      - ${FOOTBALL_ADAPTER_SERVER_PORT}:${FOOTBALL_ADAPTER_SERVER_PORT}
+    expose:
+      - ${FOOTBALL_ADAPTER_SERVER_PORT}
+
 
   # Data layer
   database:
