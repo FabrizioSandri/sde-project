@@ -10,9 +10,8 @@ router.get('/', (req, res) => {
   res.send('Welcome to the authentication interface');
 });
 
-// Utilities endpoints and authentication status
+// Get the authentication status
 router.get('/isAuthenticated', controller.isAuthenticated);
-router.get('/getUserInfo', onlyAuthenticated, controller.getUserInfo);
 
 // Normal authentication
 router.post('/login', normal_controller.login);
