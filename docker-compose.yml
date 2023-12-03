@@ -53,6 +53,21 @@ services:
       - db_adapter
       - eva_adapter
 
+  news_aggregator:
+    build: ./business_logic/news_aggregator
+    restart: always
+    environment:
+      - NEWS_AGGREGATOR_SERVICE_PORT
+      - RSS_ADAPTER_SERVER_PORT
+    ports:
+      - ${NEWS_AGGREGATOR_SERVICE_PORT}:${NEWS_AGGREGATOR_SERVICE_PORT}
+    expose:
+      - ${NEWS_AGGREGATOR_SERVICE_PORT}
+    depends_on:
+      - html_adapter
+      - rss_adapter
+
+  # Adapter Layer
   eva_adapter:
     build: ./adapter/eva_api
     restart: always
