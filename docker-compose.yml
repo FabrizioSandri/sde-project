@@ -29,6 +29,7 @@ services:
       - FOOTBALL_SERVICE_PORT
       - DB_ADAPTER_SERVER_PORT
       - FOOTBALLMATCHES_SERVER_PORT
+      - PLACEFORECAST_SERVICE_PORT
     ports:
       - ${FOOTBALLMATCHES_SERVER_PORT}:${FOOTBALLMATCHES_SERVER_PORT}
     expose:
@@ -68,6 +69,21 @@ services:
       - db_adapter
       - eva_adapter
 
+  news_aggregator:
+    build: ./business_logic/news_aggregator
+    restart: always
+    environment:
+      - NEWS_AGGREGATOR_SERVICE_PORT
+      - RSS_ADAPTER_SERVER_PORT
+    ports:
+      - ${NEWS_AGGREGATOR_SERVICE_PORT}:${NEWS_AGGREGATOR_SERVICE_PORT}
+    expose:
+      - ${NEWS_AGGREGATOR_SERVICE_PORT}
+    depends_on:
+      - html_adapter
+      - rss_adapter
+
+  
   football:
     build: ./business_logic/football
     restart: always
@@ -87,6 +103,7 @@ services:
     environment:
       - WEATHER_ADAPTER_SERVER_PORT
       - POSITIONSTACK_ADAPTER_SERVER_PORT
+      - PLACEFORECAST_SERVICE_PORT
     ports:
       - ${PLACEFORECAST_SERVICE_PORT}:${PLACEFORECAST_SERVICE_PORT}
     expose:
@@ -95,7 +112,8 @@ services:
       - weather_adapter
       - positionstack_adapter
 
-# Adapter logic
+
+  # Adapter Layer
   eva_adapter:
     build: ./adapter/eva_api
     restart: always
@@ -164,7 +182,7 @@ services:
     restart: always
     environment: 
       - POSITIONSTACK_ADAPTER_SERVER_PORT
-      - STACKPOSITZION_ACCESSKEY
+      - STACKPOSITION_ACCESSKEY
     ports:
       - ${POSITIONSTACK_ADAPTER_SERVER_PORT}:${POSITIONSTACK_ADAPTER_SERVER_PORT}
     expose:
@@ -180,7 +198,6 @@ services:
       - ${FOOTBALL_ADAPTER_SERVER_PORT}:${FOOTBALL_ADAPTER_SERVER_PORT}
     expose:
       - ${FOOTBALL_ADAPTER_SERVER_PORT}
-
 
   # Data layer
   database:
