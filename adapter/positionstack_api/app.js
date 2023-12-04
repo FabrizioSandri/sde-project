@@ -14,18 +14,31 @@ app.get('/getCoordinates',(req,res)=>{
     method: 'GET',
     url: 'http://api.positionstack.com/v1/forward',
     params:{
-      access_key: process.env.STACKPOSITZION_ACCESSKEY,
+      access_key: process.env.STACKPOSITION_ACCESSKEY,
       query: req.query.place
     }
-    };
+  };
   
   
     axios.request(options)
     .then((result)=>{
-      res.send(result.data)
+      if( !result.data.data ){
+
+        return res.status(400).json({
+          status:'error',
+          msg:'no coordinates found'
+        })
+      }
+      return res.status(200).json({
+        status:'success',
+        data:result.data.data[0]
+      });
     })
     .catch((err)=>{
-      console.log(err);
+      return res.status(400).json({
+        status:"error",
+        msg: err
+      })
     });
   
   })
