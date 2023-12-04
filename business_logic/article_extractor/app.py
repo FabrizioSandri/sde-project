@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 import os
-from newspaper import Article 
+from newspaper import Article
+from urllib.parse import unquote 
 import json
 
 import requests
@@ -11,25 +12,25 @@ app = Flask(__name__)
 def index():    
     return "Welcome to the Article Extractor service"
 
-@app.route('/Article', methods=['POST']) 
+@app.route('/article', methods = ["GET"])  
 def get_article():
-    # get article url from post request
-    article_url = request.get_json()['url']
+    
+    encoded_url = request.args.get('url', '')
+    decoded_url = unquote(encoded_url)
 
     HTML_ADAPTER_PORT = os.environ["HTML_ADAPTER_SERVER_PORT"]
 
-    # Send request to html adapter
-    url = "http://html_adapter:" + HTML_ADAPTER_PORT + "/getHtml"
-    myobj = {'url': article_url}
-
-    x = requests.post(url, data = json.dumps(myobj), headers = {'Content-Type': 'application/json'})
+    # Making a GET request with the encoded URL as a parameter
+    res = requests.get("http://html_adapter:" + HTML_ADAPTER_PORT + "/getHtml?url=" + decoded_url)
     
-    html = json.loads(x.text)['html']
+    if res.status_code == 200:
+        print("Request successful")
+        html = json.loads(res.text)['html']
 
     response = {}
 
     # Extract information from html
-    article = Article(url)
+    article = Article(decoded_url)
     article.download(html)
     article.parse()
 
