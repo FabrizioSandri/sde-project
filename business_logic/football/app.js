@@ -18,10 +18,9 @@ app.get('/getLeaguesAvailable',(req,res)=>{
   axios.request(options)
   .then(response => {
     if(response.status != 200){
-
       return res.status(400).json({
         status:'error',
-        msg: response.data
+        msg: response.data.msg
       })
     }
 
@@ -54,13 +53,13 @@ app.get('/getTeamsOfLeague',(req,res)=>{
     if(response.status != 200){
       return res.status(400).json({
         status:'error',
-        msg: response.msg
+        msg: response.data.msg
       })
     }
     let teams = filterTeamsInfo(response.data.teams);
     res.status(200).json({
       status:'success',
-      teams:teams
+      teams: teams
     })
   })
   .catch(error => {
@@ -87,10 +86,9 @@ app.get('/getTeamInfo',(req,res)=>{
     if(response.status != 200){
       return res.status(400).json({
         status:'error',
-        msg: response.msg
+        msg: response.data.msg
       })
     }
-    
     res.status(200).json({
       status:'success',
       teamInfo:response.data.teamInfo[0]
@@ -118,17 +116,16 @@ app.post('/getInfoMatches', (req, res) => {
   
     axios.request(options)
     .then(response => {
-
       if(response.status != 200){
         return res.status(400).json({
           status:'error',
-          msg: response.msg
+          msg: response.data.msg
         })
       }
       let filteredMatches = filterMatches(response.data.matches);
 
       return res.status(200).json({
-          status:'success',
+          status: 'success',
           matches: filteredMatches
         })
     })

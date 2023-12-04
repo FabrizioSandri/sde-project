@@ -1,12 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const teamsManager = require('../controllers/teamsManagerController');
+const teamsManager = require('../controllers/teamManagerController');
 const footballController = require("../controllers/footballController")
-
-
-router.get('/', (req, res) => {
-  res.send('Welcome to the football interface');
-});
 
 // football endpoints
 router.get('/getLeagues', footballController.getLeagues);

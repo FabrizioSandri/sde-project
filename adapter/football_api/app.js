@@ -111,9 +111,9 @@ app.get('/getLeagues', (req, res) => {
   
   // Define a simple endpoint
   app.post('/getFixtures', async (req, res) => {
-    let data=[];
+    let data = [];
     const teamIds=req.body.teamIds;
-    let resp='';
+    let resp = '';
     if (!teamIds){
         return res.status(400).json({
             status:'error',
@@ -146,7 +146,7 @@ app.get('/getLeagues', (req, res) => {
     }
     return res.status(200).json({
       status:'success',
-      matches:data
+      matches: data
     });
   });
   

@@ -33,8 +33,8 @@ app.get('/getWeather',(req,res)=>{
       })
       .catch((err)=>{
         return res.status(400).json({
-          status:'error',
-          msg:err
+          status: 'error',
+          msg: err
       })
     });  
   })

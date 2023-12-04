@@ -17,7 +17,6 @@ module.exports.userTeams = (req,res)=>{
     }
     axios.request(options)
     .then((response)=>{
-        
         if(response.status != 200){
             res.status(400).json({
                 status: "error",
@@ -82,13 +81,13 @@ module.exports.addTeam = (req,res)=>{
 };
 
 module.exports.removeTeam = (req,res)=>{
-    if(!req.body.userId){
+    if( !req.body.userId ){
         return res.status(400).json({
             status:'error',
             msg:'user not authenticated'
         });
     }
-    if(!req.body.teamId ){
+    if( !req.body.teamId ){
         return res.status(400).json({
             status:'error',
             msg:'invalid team id'
@@ -104,7 +103,7 @@ module.exports.removeTeam = (req,res)=>{
         }
     }
     axios.request(options)
-    .then((response)=>{
+    .then((response) => {
         if(response.status != 200){
             res.status(400).json({
                 status: "error",

@@ -9,6 +9,12 @@ module.exports.getLeagues = (req, res) => {
     
     axios.request(options)
     .then(response => {
+        if(response.status != 200){
+            return res.status(400).json({
+                status: 'error',
+                msg: response.data.msg
+            });
+        }
         res.status(200).json({
             status:'success',
             leagues:response.data.leagues
@@ -40,7 +46,13 @@ module.exports.getTeamsByLeagueId = (req, res) => {
     
     axios.request(options)
     .then(response => {
-        res.status(200).json({
+        if(response.status != 200){
+            return res.status(400).json({
+                status: 'error',
+                msg: response.data.msg
+            });
+        }
+        return res.status(200).json({
             status:'success',
             teams:response.data.teams
         })  
@@ -73,7 +85,13 @@ module.exports.getTeamInfoById = (req, res) => {
     
     axios.request(options)
     .then(response => {
-        res.status(200).json({
+        if(response.status != 200){
+            return res.status(400).json({
+                status: 'error',
+                msg: response.data.msg
+            });
+        }
+        return res.status(200).json({
             status:'success',
             teamInfo:response.data.teamInfo
         })  
@@ -111,6 +129,12 @@ module.exports.getMatchesOfInterest = (req,res)=>{
     }
     axios.request(options)
     .then(async (response) => {
+        if(response.status != 200){
+            return res.status(400).json({
+                status: 'error',
+                msg: response.data.msg
+            });
+        }
         let options;
         let completeMatchesWithInfo=[];
         let teamIds=[];
@@ -130,7 +154,7 @@ module.exports.getMatchesOfInterest = (req,res)=>{
         };
         try {
             let {data: data,  status: statusMatches} = await axios.request(options);
-            if(statusMatches!=200){
+            if(statusMatches != 200){
                 return res.status(400).json({
                     status:'error',
                     msg:'error in retrieving matches'
@@ -152,8 +176,8 @@ module.exports.getMatchesOfInterest = (req,res)=>{
                     const {data: weatherResp, status: statusForecast} = await axios.request(options);
                     if(statusForecast!=200){
                         return res.status(400).json({
-                            status:'error',
-                            msg:'error in retrieving forecast'
+                            status: 'error',
+                            msg: 'error in retrieving forecast'
                         });
                     }
                     match.weather=weatherResp.weather;
@@ -171,7 +195,6 @@ module.exports.getMatchesOfInterest = (req,res)=>{
                 msg: error
             });
         }
-        
         
         return res.status(200).json({
             status:'success',

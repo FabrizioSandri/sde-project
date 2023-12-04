@@ -11,7 +11,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/getWeatherMatches', (req, res) => {
     if(!req.query.stadium || !req.query.matchDate){
-
         return res.status(400).json({
             status:'error',
             msg: 'empty stadium name or date'
@@ -28,8 +27,14 @@ app.get('/getWeatherMatches', (req, res) => {
     };
     axios.request(options_stackpoint)
     .then((result)=>{
+      if(result.status != 200){
+        return res.status(400).json({
+          status:'error',
+          msg: result.data.msg
+        })
+      }
       if (!result.data.data.latitude || !result.data.data.longitude){
-        return res.status(404).json({
+        return res.status(400).json({
           status:"not found",
           msg:"coordinates of the stadium not found"
         });
@@ -45,11 +50,11 @@ app.get('/getWeatherMatches', (req, res) => {
       };
 
       axios.request(options_weather)
-      .then((result)=>{
+      .then((result) => {
         if(result.status != 200){
           return res.status(400).json({
             status:'error',
-            msg: result.msg
+            msg: result.data.msg
           })
         }
         let weatherForecast = filterWeatherForecast(result.data.data.data,  req.query.matchDate);
@@ -68,7 +73,7 @@ app.get('/getWeatherMatches', (req, res) => {
     .catch((err)=>{
       return res.status(400).json({
         status:'error',
-        msg:err
+        msg: err
       });
     });
   })
