@@ -24,15 +24,20 @@ app.get('/getWeather',(req,res)=>{
       }
     };
     
-        axios.request(options)
+      axios.request(options)
       .then((result)=>{
-        res.send(result.date);
+        res.status(200).json({
+          status:"success",
+          data: result.data
+        })
       })
       .catch((err)=>{
-        console.log(err);
-      });
-    
-    })
+        return res.status(400).json({
+          status:'error',
+          msg:err
+      })
+    });  
+  })
 
 const PORT = process.env.WEATHER_ADAPTER_SERVER_PORT || 3000;
 app.listen(PORT, () => {
