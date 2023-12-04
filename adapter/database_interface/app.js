@@ -124,7 +124,7 @@ app.post('/registerUser', async (req, res) => {
 
 });
 
-//==========================Football interests mangers==========================
+//==========================Football interests==========================
 
 app.post('/addTeam', async (req, res) => {
   const {userId, leagueId, teamId} = req.body;
@@ -156,8 +156,8 @@ app.post('/addTeam', async (req, res) => {
 
 app.delete('/removeTeam', async (req, res) => {
   
-  const userId = req.body.userId;
-  const teamId = req.body.teamId;
+  const userId = req.query.userId;
+  const teamId = req.query.teamId;
 
   if (!userId || !teamId){
     return res.status(400).json({
@@ -202,7 +202,7 @@ app.get('/getTeams', async (req, res) => {
     } 
     res.status(200).json({
       status: "success",
-      msg_result: result,
+      result: result
     });
   })
 })
