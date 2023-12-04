@@ -1,9 +1,13 @@
-// Import the express module
 const express = require('express');
 const axios = require('axios');
+const bodyParser = require('body-parser');
 
 // Create an instance of express
 const app = express();
+
+//body parser middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/getLeagues', (req, res) => {
     const options = {
@@ -12,14 +16,16 @@ app.get('/getLeagues', (req, res) => {
       headers: {
         'X-RapidAPI-Key': process.env.X_RAPIDAPI_KEY,
         'X-RapidAPI-Host': 'api-football-beta.p.rapidapi.com'
+      },
+      params:{
+        season: currentFootballSeasonYear().toString()
       }
     };
-  
     axios.request(options)
     .then(response => {
       res.status(200).json({
         status:'success',
-        data:response.data
+        leagues: response.data.response
       })
     })
     .catch(error => {
@@ -32,7 +38,7 @@ app.get('/getLeagues', (req, res) => {
   
 
   app.get('/getTeams', (req, res) => {
-    if (!req.query.league){
+    if (!req.query.leagueId){
         return res.status(400).json({
             status:'error',
             msg:'league value is mising'
@@ -42,20 +48,19 @@ app.get('/getLeagues', (req, res) => {
       method: 'GET',
       url: 'https://api-football-beta.p.rapidapi.com/teams',
       params:{
-        season:currentFootballSeasonYear.toString(),
-        league:req.query.league
+        season:currentFootballSeasonYear().toString(),
+        league:req.query.leagueId
       },
       headers: {
         'X-RapidAPI-Key': process.env.X_RAPIDAPI_KEY,
         'X-RapidAPI-Host': 'api-football-beta.p.rapidapi.com'
       }
     };
-  
     axios.request(options)
     .then(response => {
       res.status(200).json({
         status:'success',
-        data:response.data
+        teams:response.data.response
       })
     })
     .catch(error => {
@@ -67,20 +72,20 @@ app.get('/getLeagues', (req, res) => {
   });
   
   app.get('/getTeamInfoById', (req, res) => {
-    const {league, teamId}= req.query;
-    if (!league || !teamId){
+    const {leagueId, teamId} = req.query;
+    if (!leagueId || !teamId){
         return res.status(400).json({
             status:'error',
             msg:'league or tema ID value is mising'
         });
     }
-    console.log(req.query);
+
     const options = {
       method: 'GET',
       url: 'https://api-football-beta.p.rapidapi.com/teams',
       params:{
-        season:currentFootballSeasonYear.toString(),
-        league:league,
+        season:currentFootballSeasonYear().toString(),
+        league:leagueId,
         id:teamId
       },
       headers: {
@@ -93,7 +98,7 @@ app.get('/getLeagues', (req, res) => {
     .then(response => {
       res.status(200).json({
         status:'success',
-        data:response.data
+        teamInfo: response.data.response
       })
     })
     .catch(error => {
@@ -105,43 +110,47 @@ app.get('/getLeagues', (req, res) => {
   });
   
   // Define a simple endpoint
-  app.get('/getFixtures', (req, res) => {
-    if (!req.query.teamId){
+  app.post('/getFixtures', async (req, res) => {
+    let data=[];
+    const teamIds=req.body.teamIds;
+    let resp='';
+    if (!teamIds){
         return res.status(400).json({
             status:'error',
-            msg:'team Id value is mising'
+            msg:'team Ids value are mising'
         });
     }
-    const options = {
-      method: 'GET',
-      url: 'https://api-football-beta.p.rapidapi.com/fixtures',
-      params: {
-        team: req.query.teamId,
-        next: req.query.numberOfNextMatches.toString() ||'40',
-        season: currentFootballSeasonYear()
-      },
-      headers: {
-        'X-RapidAPI-Key': process.env.X_RAPIDAPI_KEY,
-        'X-RapidAPI-Host': 'api-football-beta.p.rapidapi.com'
+    for (const teamId of teamIds){
+      const options = {
+        method: 'GET',
+        url: 'https://api-football-beta.p.rapidapi.com/fixtures',
+        params: {
+          team: teamId,
+          next: req.body.numberOfNextMatches,
+          season: currentFootballSeasonYear().toString()
+        },
+        headers: {
+          'X-RapidAPI-Key': process.env.X_RAPIDAPI_KEY ,
+          'X-RapidAPI-Host': 'api-football-beta.p.rapidapi.com'
+        }
+      };
+      try {
+        resp = await axios.request(options);
+        data.push(resp.data.response)
+      } catch (error) {
+        return res.status(400).json({
+          status:'error',
+          msg: error
+        })
       }
-    };
-      
-    axios.request(options)
-    .then(response => {
-      res.status(200).json({
-        status:'success',
-        data:response.data
-      })
-    })
-    .catch(error => {
-      res.status(400).json({
-        status:'error',
-        msg: error
-      })
+    }
+    return res.status(200).json({
+      status:'success',
+      matches:data
     });
   });
   
-
+// Start the server
 const PORT = process.env.FOOTBALL_ADAPTER_SERVER_PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
@@ -156,3 +165,4 @@ function currentFootballSeasonYear(){
     }
     return seasonYear;
   }
+
