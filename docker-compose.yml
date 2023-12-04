@@ -80,8 +80,20 @@ services:
     expose:
       - ${NEWS_AGGREGATOR_SERVICE_PORT}
     depends_on:
-      - html_adapter
       - rss_adapter
+  
+  article_extractor:
+    build: ./business_logic/article_extractor
+    restart: always
+    environment:
+      - ARTICLE_EXTRACTOR_SERVICE_PORT
+      - HTML_ADAPTER_SERVER_PORT
+    ports:
+      - ${ARTICLE_EXTRACTOR_SERVICE_PORT}:${ARTICLE_EXTRACTOR_SERVICE_PORT}
+    expose:
+      - ${ARTICLE_EXTRACTOR_SERVICE_PORT}
+    depends_on:
+      - html_adapter
 
   football:
     build: ./business_logic/football
