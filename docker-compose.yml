@@ -83,7 +83,6 @@ services:
       - html_adapter
       - rss_adapter
 
-  
   football:
     build: ./business_logic/football
     restart: always
