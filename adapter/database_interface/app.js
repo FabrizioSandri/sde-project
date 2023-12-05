@@ -130,12 +130,36 @@ app.post('/registerUser', async (req, res) => {
 //==========================Football interests==========================
 
 app.post('/addTeam', async (req, res) => {
-  const {userId, leagueId, teamId} = req.body;
+  const {leagueId, teamId} = req.body;
+  var userId;
+  const optionCheckAuthentication = {
+    method: 'GET',
+    url: `http://authentication:${process.env.AUTHENTICATION_SERVER_PORT}/isAuthenticated`,
+    params: {
+      token: req.body.token
+    }
+  }
+  try{
+    let {data: data} = await axios.request(optionCheckAuthentication);
+    if (data.authenticated == false){
+      return res.status(401).json({
+        status: "success",
+        msg: "Authentication failed"
+      })
+    }else{
+      userId = data.data.id; 
+    }
+  }catch(error){
+    return res.status(400).json({
+      sataus: "error",
+      msg: error
+    })
+  }
 
-  if (!userId || !leagueId || !teamId){
+  if (!leagueId || !teamId){
     return res.status(400).json({
       status: "error",
-      msg: "some parameter are invalid"
+      msg: "team Id or league id parameter are invalid"
     });
   }
   let addTeamQuery=`INSERT INTO followedTeams (userId, leagueId, teamId) VALUES( "${userId}", "${leagueId}", "${teamId}");`;
@@ -159,13 +183,36 @@ app.post('/addTeam', async (req, res) => {
 
 app.delete('/removeTeam', async (req, res) => {
   
-  const userId = req.query.userId;
   const teamId = req.query.teamId;
+  var userId;
+  const optionCheckAuthentication = {
+    method: 'GET',
+    url: `http://authentication:${process.env.AUTHENTICATION_SERVER_PORT}/isAuthenticated`,
+    params: {
+      token: req.body.token
+    }
+  }
+  try{
+    let {data: data} = await axios.request(optionCheckAuthentication);
+    if (data.authenticated == false){
+      return res.status(401).json({
+        status: "success",
+        msg: "Authentication failed"
+      })
+    }else{
+      userId = data.data.id; 
+    }
+  }catch(error){
+    return res.status(400).json({
+      sataus: "error",
+      msg: error
+    })
+  }
 
-  if (!userId || !teamId){
+  if (!teamId){
     return res.status(400).json({
       status: "error",
-      msg: "some parameter are invalid"
+      msg: "invalid team Id"
     });
   }
   let deleteTeamQuery=`DELETE FROM followedTeams WHERE userId=${userId} AND teamID=${teamId}`;
@@ -187,22 +234,43 @@ app.delete('/removeTeam', async (req, res) => {
 })
 
 app.get('/getTeams', async (req, res) => {
-  const userId = req.query.userId;
-  if (!userId){
-    return res.status(400).json({
-      status: "error",
-      msg: "user id not valid"
-    });
+  var userId;
+  const optionCheckAuthentication = {
+    method: 'GET',
+    url: `http://authentication:${process.env.AUTHENTICATION_SERVER_PORT}/isAuthenticated`,
+    params: {
+      token: req.body.token
+    }
   }
+  try{
+    let {data: data} = await axios.request(optionCheckAuthentication);
+    if (data.authenticated == false){
+      return res.status(401).json({
+        status: "success",
+        msg: "Authentication failed"
+      })
+    }else{
+      userId = data.data.id; 
+    }
+  }catch(error){
+    return res.status(400).json({
+      sataus: "error",
+      msg: error
+    })
+  }
+
+
   let getTeamsQuery=`SELECT * FROM followedTeams WHERE userId=${userId}`;
   
   pool.query(getTeamsQuery,(error, result)=>{
     if (error){
-      return res.status(400).json({
+      return res.status(200).json({
         status: "error",
         msg: error 
       })
     } 
+
+    //sending teams
     res.status(200).json({
       status: "success",
       result: result

@@ -132,6 +132,7 @@ services:
       - MYSQL_PASSWORD
       - DB_PORT
       - DB_ADAPTER_SERVER_PORT
+      - AUTHENTICATION_SERVER_PORT
     ports:
       - ${DB_ADAPTER_SERVER_PORT}:${DB_ADAPTER_SERVER_PORT}
     expose:

@@ -105,10 +105,10 @@ module.exports.getTeamInfoById = (req, res) => {
 };
 
 module.exports.getMatchesOfInterest = (req,res)=>{
-    if(!req.body.userId){
+    if(!req.body.token){
         return res.status(400).json({
             status:'error',
-            msg:'user not authenticated'
+            msg:'token not provided'
         });
     }
 
@@ -124,7 +124,7 @@ module.exports.getMatchesOfInterest = (req,res)=>{
         method: 'GET',
         url: db_endpoint,
         params:{
-          userId: req.body.userId 
+          token: req.body.token 
         }
     }
     axios.request(options)

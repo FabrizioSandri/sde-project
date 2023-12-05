@@ -1,10 +1,10 @@
 const axios = require('axios');
 
 module.exports.userTeams = (req,res)=>{
-    if(!req.body.userId){
+    if(!req.body.token){
         return res.status(400).json({
             status:'error',
-            msg:'user not authenticated'
+            msg:'token not provided'
         });
     }
     let db_endpoint = `http://db_adapter:${process.env.DB_ADAPTER_SERVER_PORT}/getTeams`;
@@ -12,7 +12,7 @@ module.exports.userTeams = (req,res)=>{
         method: 'GET',
         url: db_endpoint,
         params:{
-          userId: req.body.userId 
+          token: req.body.token
         }
     }
     axios.request(options)
@@ -37,10 +37,10 @@ module.exports.userTeams = (req,res)=>{
 };
 
 module.exports.addTeam = (req,res)=>{
-    if(!req.body.userId){
+    if(!req.body.token){
         return res.status(400).json({
             status:'error',
-            msg:'user not authenticated'
+            msg:'token not provided'
         });
     }
     if(!req.body.teamId || !req.body.leagueId){
@@ -54,7 +54,7 @@ module.exports.addTeam = (req,res)=>{
         method: 'POST',
         url: db_endpoint,
         data:{
-          userId: req.body.userId,
+          token: req.body.token,
           leagueId: req.body.leagueId,
           teamId: req.body.teamId 
         }
@@ -81,10 +81,10 @@ module.exports.addTeam = (req,res)=>{
 };
 
 module.exports.removeTeam = (req,res)=>{
-    if( !req.body.userId ){
+    if(!req.body.token){
         return res.status(400).json({
             status:'error',
-            msg:'user not authenticated'
+            msg:'token not provided'
         });
     }
     if( !req.body.teamId ){
@@ -98,7 +98,7 @@ module.exports.removeTeam = (req,res)=>{
         method: 'DELETE',
         url: db_endpoint,
         params:{
-          userId: req.body.userId,
+          token: req.body.token,
           teamId: req.body.teamId 
         }
     }
