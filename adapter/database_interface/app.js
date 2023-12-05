@@ -162,6 +162,13 @@ app.post('/addTeam', async (req, res) => {
       msg: "team Id or league id parameter are invalid"
     });
   }
+  if(!validateInput(userId) || !validateInput(leagueId) || !validateInput(teamId)){
+    return res.status(400).json({
+      status: "success",
+      msg: "characters not allowed"
+
+    })
+  }
   let addTeamQuery=`INSERT INTO followedTeams (userId, leagueId, teamId) VALUES( "${userId}", "${leagueId}", "${teamId}");`;
 
   pool.query(addTeamQuery, (err) => {
@@ -215,6 +222,13 @@ app.delete('/removeTeam', async (req, res) => {
       msg: "invalid team Id"
     });
   }
+  if(!validateInput(userId) || !validateInput(teamId)){
+    return res.status(400).json({
+      status: "success",
+      msg: "characters not allowed"
+
+    })
+  }
   let deleteTeamQuery=`DELETE FROM followedTeams WHERE userId=${userId} AND teamID=${teamId}`;
 
   pool.query(deleteTeamQuery, (err) => {
@@ -259,7 +273,13 @@ app.get('/getTeams', async (req, res) => {
     })
   }
 
+  if(!validateInput(teamId)){
+    return res.status(400).json({
+      status: "success",
+      msg: "characters not allowed"
 
+    })
+  }
   let getTeamsQuery=`SELECT * FROM followedTeams WHERE userId=${userId}`;
   
   pool.query(getTeamsQuery,(error, result)=>{
@@ -285,3 +305,11 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
+
+
+//===========================utility function===========================
+function validateInput(input){
+  // Use a regular expression to check if the input contains only letters or numbers
+  const regex = /^[a-zA-Z0-9@. ]+$/;
+  return regex.test(input);
+};
