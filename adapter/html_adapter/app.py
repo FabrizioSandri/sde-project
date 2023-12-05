@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import os
 from urllib.request import urlopen
+from urllib.parse import unquote
 
 app = Flask(__name__)
 
@@ -8,11 +9,13 @@ app = Flask(__name__)
 def index():    
     return "Welcome to the HTML adapter"
 
-@app.route('/getHtml', methods=['POST']) 
+@app.route('/getHtml', methods = ["GET"]) 
 def article_html():
-    article_url = request.get_json()['url']
 
-    fd = urlopen(article_url)
+    encoded_url = request.args.get('url', '')
+    decoded_url = unquote(encoded_url)
+
+    fd = urlopen(decoded_url)
     content = fd.read()
     fd.close()
 
