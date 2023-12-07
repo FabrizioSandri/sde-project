@@ -1,4 +1,5 @@
 const express = require('express');
+const axios = require('axios');
 const bodyParser = require('body-parser');
 const mysql = require('mysql2');
 
@@ -151,7 +152,7 @@ app.post('/addTeam', async (req, res) => {
     }
   }catch(error){
     return res.status(400).json({
-      sataus: "error",
+      status: "error",
       msg: error
     })
   }
@@ -211,11 +212,10 @@ app.delete('/removeTeam', async (req, res) => {
     }
   }catch(error){
     return res.status(400).json({
-      sataus: "error",
+      status: "error",
       msg: error
     })
   }
-
   if (!teamId){
     return res.status(400).json({
       status: "error",
@@ -268,12 +268,12 @@ app.get('/getTeams', async (req, res) => {
     }
   }catch(error){
     return res.status(400).json({
-      sataus: "error",
+      status: "error",
       msg: error
     })
   }
 
-  if(!validateInput(teamId)){
+  if(!validateInput(userId)){
     return res.status(400).json({
       status: "success",
       msg: "characters not allowed"
