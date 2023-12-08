@@ -21,29 +21,29 @@ app.get('/getWeatherMatches', (req, res) => {
     const options_stackpoint = {
         method: 'GET',
         url: stackpoint_endpoint,
-        params:{
+        params: {
             place:req.query.stadium
         }
     };
     axios.request(options_stackpoint)
     .then((result)=>{
-      if(result.status != 200){
-        return res.status(400).json({
-          status:'error',
+      if(result.data.status != "success"){
+        return res.status(200).json({
+          status: 'error',
           msg: result.data.msg
         })
       }
       if (!result.data.data.latitude || !result.data.data.longitude){
-        return res.status(400).json({
-          status:"not found",
-          msg:"coordinates of the stadium not found"
+        return res.status(200).json({
+          status: "error",
+          msg: "coordinates of the stadium not found"
         });
       }
       
       const options_weather = {
         method: 'GET',
         url: weather_endpoint,
-        params:{
+        params: {
           lat: result.data.data.latitude,
           lon: result.data.data.longitude
         }
@@ -51,27 +51,28 @@ app.get('/getWeatherMatches', (req, res) => {
 
       axios.request(options_weather)
       .then((result) => {
-        if(result.status != 200){
-          return res.status(400).json({
-            status:'error',
+        if(result.data.status != "success"){
+          return res.status(200).json({
+            status: 'error',
             msg: result.data.msg
           })
         }
         let weatherForecast = filterWeatherForecast(result.data.data.data,  req.query.matchDate);
         return res.status(200).json({
+          status: "success",
           weather: weatherForecast
         });
       })
       .catch((err)=>{
-        return res.status(400).json({
-          status:'error',
-          msg:err
+        return res.status(200).json({
+          status: 'error',
+          msg: err
         });
       });
 
     })
     .catch((err)=>{
-      return res.status(400).json({
+      return res.status(200).json({
         status:'error',
         msg: err
       });

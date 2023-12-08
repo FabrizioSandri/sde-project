@@ -24,7 +24,7 @@ app.get('/getCoordinates',(req,res)=>{
     .then((result)=>{
       if( !result.data.data ){
 
-        return res.status(400).json({
+        return res.status(200).json({
           status:'error',
           msg:'no coordinates found'
         })
@@ -35,7 +35,7 @@ app.get('/getCoordinates',(req,res)=>{
       });
     })
     .catch((err)=>{
-      return res.status(400).json({
+      return res.status(200).json({
         status:"error",
         msg: err
       })

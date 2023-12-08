@@ -143,29 +143,29 @@ app.post('/addTeam', async (req, res) => {
   try{
     let {data: data} = await axios.request(optionCheckAuthentication);
     if (data.authenticated == false){
-      return res.status(401).json({
-        status: "success",
+      return res.status(200).json({
+        status: "error",
         msg: "Authentication failed"
       })
     }else{
       userId = data.data.id; 
     }
   }catch(error){
-    return res.status(400).json({
+    return res.status(200).json({
       status: "error",
       msg: error
     })
   }
 
   if (!leagueId || !teamId){
-    return res.status(400).json({
+    return res.status(200).json({
       status: "error",
       msg: "team Id or league id parameter are invalid"
     });
   }
   if(!validateInput(userId) || !validateInput(leagueId) || !validateInput(teamId)){
-    return res.status(400).json({
-      status: "success",
+    return res.status(200).json({
+      status: "error",
       msg: "characters not allowed"
 
     })
@@ -174,14 +174,14 @@ app.post('/addTeam', async (req, res) => {
 
   pool.query(addTeamQuery, (err) => {
     if (err) {
-      return res.status(400).json({
+      return res.status(200).json({
         status: "error",
         msg: err
       });
     }
 
     // team added
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       msg: "team added"
     });
@@ -197,34 +197,34 @@ app.delete('/removeTeam', async (req, res) => {
     method: 'GET',
     url: `http://authentication:${process.env.AUTHENTICATION_SERVER_PORT}/isAuthenticated`,
     params: {
-      token: req.body.token
+      token: req.query.token
     }
   }
   try{
     let {data: data} = await axios.request(optionCheckAuthentication);
     if (data.authenticated == false){
-      return res.status(401).json({
-        status: "success",
+      return res.status(200).json({
+        status: "error",
         msg: "Authentication failed"
       })
     }else{
       userId = data.data.id; 
     }
   }catch(error){
-    return res.status(400).json({
+    return res.status(200).json({
       status: "error",
       msg: error
     })
   }
   if (!teamId){
-    return res.status(400).json({
+    return res.status(200).json({
       status: "error",
       msg: "invalid team Id"
     });
   }
   if(!validateInput(userId) || !validateInput(teamId)){
-    return res.status(400).json({
-      status: "success",
+    return res.status(200).json({
+      status: "error",
       msg: "characters not allowed"
 
     })
@@ -233,14 +233,14 @@ app.delete('/removeTeam', async (req, res) => {
 
   pool.query(deleteTeamQuery, (err) => {
     if (err) {
-      return res.status(400).json({
+      return res.status(200).json({
         status: "error",
         msg: err
       });
     }
 
     // team deleted
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       msg: "team deleted"
     });
@@ -253,29 +253,29 @@ app.get('/getTeams', async (req, res) => {
     method: 'GET',
     url: `http://authentication:${process.env.AUTHENTICATION_SERVER_PORT}/isAuthenticated`,
     params: {
-      token: req.body.token
+      token: req.query.token
     }
   }
   try{
     let {data: data} = await axios.request(optionCheckAuthentication);
     if (data.authenticated == false){
-      return res.status(401).json({
-        status: "success",
+      return res.status(200).json({
+        status: "error",
         msg: "Authentication failed"
       })
     }else{
       userId = data.data.id; 
     }
   }catch(error){
-    return res.status(400).json({
+    return res.status(200).json({
       status: "error",
       msg: error
     })
   }
 
   if(!validateInput(userId)){
-    return res.status(400).json({
-      status: "success",
+    return res.status(200).json({
+      status: "error",
       msg: "characters not allowed"
 
     })

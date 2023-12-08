@@ -9,19 +9,19 @@ module.exports.getLeagues = (req, res) => {
     
     axios.request(options)
     .then(response => {
-        if(response.status != 200){
-            return res.status(400).json({
+        if(response.data.status != "success"){
+            return res.status(200).json({
                 status: 'error',
                 msg: response.data.msg
             });
         }
-        res.status(200).json({
+        return res.status(200).json({
             status:'success',
             leagues:response.data.leagues
         })  
     })
     .catch(error => {
-        res.status(400).json({
+        return res.status(200).json({
             status:'error',
             msg: error
         })
@@ -31,22 +31,22 @@ module.exports.getLeagues = (req, res) => {
 module.exports.getTeamsByLeagueId = (req, res) => {
     let football_endpoint = `http://football:${process.env.FOOTBALL_SERVICE_PORT}/getTeamsOfLeague`;
     if(!req.query.leagueId){
-        return res.status(400).json({
-            status:'error',
+        return res.status(200).json({
+            status: 'error',
             msg: 'no league id provided'
         });
     }
     const options = {
         method: 'GET',
         url: football_endpoint,
-        params:{
+        params: {
           leagueId: req.query.leagueId
         }
       };
     
     axios.request(options)
     .then(response => {
-        if(response.status != 200){
+        if(response.data.status != "success"){
             return res.status(400).json({
                 status: 'error',
                 msg: response.data.msg
@@ -58,7 +58,7 @@ module.exports.getTeamsByLeagueId = (req, res) => {
         })  
     })
     .catch(error => {
-        res.status(400).json({
+        res.status(200).json({
             status:'error',
             msg: error
         })
@@ -69,7 +69,7 @@ module.exports.getTeamInfoById = (req, res) => {
 
     let football_endpoint = `http://football:${process.env.FOOTBALL_SERVICE_PORT}/getTeamInfo`;
     if(!req.query.teamId || !req.query.leagueId){
-        return res.status(400).json({
+        return res.status(200).json({
             status:'error',
             msg: 'no league id provided'
         });
@@ -77,7 +77,7 @@ module.exports.getTeamInfoById = (req, res) => {
     const options = {
         method: 'GET',
         url: football_endpoint,
-        params:{
+        params: {
           teamId: req.query.teamId,
           leagueId: req.query.leagueId
         }
@@ -85,8 +85,8 @@ module.exports.getTeamInfoById = (req, res) => {
     
     axios.request(options)
     .then(response => {
-        if(response.status != 200){
-            return res.status(400).json({
+        if(response.data.status != "success"){
+            return res.status(200).json({
                 status: 'error',
                 msg: response.data.msg
             });
@@ -97,7 +97,7 @@ module.exports.getTeamInfoById = (req, res) => {
         })  
     })
     .catch(error => {
-        res.status(400).json({
+        res.status(200).json({
             status:'error',
             msg: error
         })
@@ -106,14 +106,14 @@ module.exports.getTeamInfoById = (req, res) => {
 
 module.exports.getMatchesOfInterest = (req,res)=>{
     if(!req.body.token){
-        return res.status(400).json({
+        return res.status(200).json({
             status:'error',
             msg:'token not provided'
         });
     }
 
     if(!req.body.numberOfMatches || req.body.numberOfMatches >= 40 || req.body.numberOfMatches <= 0){
-        return res.status(400).json({
+        return res.status(200).json({
             status:'error',
             msg:'invalid number of matches'
         });
@@ -123,14 +123,14 @@ module.exports.getMatchesOfInterest = (req,res)=>{
     const options={
         method: 'GET',
         url: db_endpoint,
-        params:{
+        params: {
           token: req.body.token 
         }
     }
     axios.request(options)
     .then(async (response) => {
-        if(response.status != 200){
-            return res.status(400).json({
+        if(response.data.status != "success"){
+            return res.status(200).json({
                 status: 'error',
                 msg: response.data.msg
             });
@@ -153,9 +153,9 @@ module.exports.getMatchesOfInterest = (req,res)=>{
             }
         };
         try {
-            let {data: data,  status: statusMatches} = await axios.request(options);
-            if(statusMatches != 200){
-                return res.status(400).json({
+            let {data: data} = await axios.request(options);
+            if(data.status != "success"){
+                return res.status(200).json({
                     status:'error',
                     msg:'error in retrieving matches'
                 });
@@ -166,32 +166,31 @@ module.exports.getMatchesOfInterest = (req,res)=>{
                 options = {
                     method: 'GET',
                     url: placeforecast_endpoint,
-                    params:{
+                    params: {
                         stadium: match.stadium,
                         matchDate: match.matchDate
                     }
                 };
                 try {
                     
-                    const {data: weatherResp, status: statusForecast} = await axios.request(options);
-                    if(statusForecast!=200){
-                        return res.status(400).json({
-                            status: 'error',
-                            msg: 'error in retrieving forecast'
-                        });
+                    const {data: weatherResp} = await axios.request(options);
+                    if(weatherResp.status != "success"){
+                        match.weather=weatherResp.msg;
                     }
-                    match.weather=weatherResp.weather;
+                    else{
+                        match.weather=weatherResp.weather;
+                    }
                     completeMatchesWithInfo.push(match);
                 } catch (error) {
-                    return res.status(400).json({
-                        status:'error',
+                    return res.status(200).json({
+                        status: 'error',
                         msg: error
                     });
                 }
             }
         } catch (error) {
-            return res.status(400).json({
-                status:'error',
+            return res.status(200).json({
+                status: 'error',
                 msg: error
             });
         }
@@ -202,9 +201,9 @@ module.exports.getMatchesOfInterest = (req,res)=>{
         })
     })
     .catch(error=>{
-        return res.status(400).json({
-            status:400,
-            msg: 'database error: '+error
+        return res.status(200).json({
+            status: "error",
+            msg: error
         });
     })
 
