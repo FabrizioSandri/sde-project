@@ -5,7 +5,7 @@ const footballController = require("../controllers/footballController")
 
 // football endpoints
 router.get('/getLeagues', footballController.getLeagues);
-router.get('/getUserInfo', footballController.getTeamsByLeagueId);
+router.get('/getTeamsByLeagueId', footballController.getTeamsByLeagueId);
 router.get('/getTeamInfoById', footballController.getTeamInfoById);
 router.post('/getMatchesOfInterest', footballController.getMatchesOfInterest);
 
