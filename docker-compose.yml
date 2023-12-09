@@ -39,6 +39,25 @@ services:
       - football
       - place_forecast
 
+  football_news:
+    build: ./process_centric/football_news
+    restart: always
+    environment:
+      - FOOTBALL_NEWS_SERVER_PORT
+      - NEWS_AGGREGATOR_SERVICE_PORT
+      - ARTICLE_EXTRACTOR_SERVICE_PORT
+      - TEXT_SIMILARITIES_SERVER_PORT
+      - DB_ADAPTER_SERVER_PORT
+    ports:
+      - ${FOOTBALL_NEWS_SERVER_PORT}:${FOOTBALL_NEWS_SERVER_PORT}
+    expose:
+      - ${FOOTBALL_NEWS_SERVER_PORT}
+    depends_on:
+      - news_aggregator
+      - article_extractor
+      - text_similarities
+      - authentication
+
   # Business logic
   login:
     build: ./business_logic/login
@@ -212,6 +231,16 @@ services:
       - ${FOOTBALL_ADAPTER_SERVER_PORT}
 
   # Data layer
+  text_similarities:
+    build: ./adapter/text_similarities
+    restart: always
+    environment: 
+      - TEXT_SIMILARITIES_SERVER_PORT
+    ports:
+      - ${TEXT_SIMILARITIES_SERVER_PORT}:${TEXT_SIMILARITIES_SERVER_PORT}
+    expose:
+      - ${TEXT_SIMILARITIES_SERVER_PORT}
+
   database:
     image: mysql
     restart: always

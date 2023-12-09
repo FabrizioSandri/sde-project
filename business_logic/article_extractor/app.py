@@ -21,7 +21,8 @@ def get_article():
     HTML_ADAPTER_PORT = os.environ["HTML_ADAPTER_SERVER_PORT"]
 
     # Making a GET request with the encoded URL as a parameter
-    res = requests.get("http://html_adapter:" + HTML_ADAPTER_PORT + "/getHtml?url=" + decoded_url)
+    res = requests.get("http://html_adapter:" + HTML_ADAPTER_PORT + "/getHtml", 
+                       params = {"url": encoded_url})
     
     if res.status_code == 200:
         print("Request successful")
