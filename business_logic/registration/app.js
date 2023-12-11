@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Set up routes
 app.get('/', (req, res) => {
-  res.send('Registration interface');
+  res.send('Registration business logic is running');
 });
 
 app.post('/registration', async (req, res) => {

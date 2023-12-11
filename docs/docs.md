@@ -1,8 +1,10 @@
-## SDE Project
+# SDE Project
 
 This is the official API documentation for the SDE Project.
 
 ------------------------------------------------------------------------------------------
+## Adapters
+
 #### EVA Adapter
 
 <details>
@@ -146,5 +148,108 @@ If the status code is `200`, the endpoint returns a JSON object adhering to the 
 </details>
 
 ------------------------------------------------------------------------------------------
+## Business Logic
 
 
+#### Login
+
+
+<details>
+ <summary><code>GET</code> <code><b>/</b></code> <code>(check if the service is running)</code></summary>
+
+##### Parameters
+
+> None
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `text/plain;charset=UTF-8`        | Login business logic is running                                     |
+
+</details>
+
+
+<details>
+ <summary><code>POST</code> <code><b>/login</b></code> <code>(Authenticate the user using the normal DB authentication)</code></summary>
+
+##### Parameters
+
+> | name              |  type     | data type      | description                         |
+> |-------------------|-----------|----------------|-------------------------------------|
+> | `email`           |  required | string         | The user's email                    |
+> | `password`        |  required | string         | The user's password                 |
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`                | JSON object, see Example                                            |
+> | `400`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+> | `401`         | `application/json`                | `{status: "error", msg: "Invalid credentials"}`                     |
+
+##### Example
+If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
+
+```json
+{
+  status: "success",
+  msg: "User login successful",
+  token: "eyJ..."
+}
+```
+
+</details>
+
+
+
+#### Registration
+
+
+<details>
+ <summary><code>GET</code> <code><b>/</b></code> <code>(check if the service is running)</code></summary>
+
+##### Parameters
+
+> None
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `text/plain;charset=UTF-8`        | Registration business logic is running                              |
+
+</details>
+
+
+<details>
+ <summary><code>POST</code> <code><b>/registration</b></code> <code>(Register the user using the DB)</code></summary>
+
+##### Parameters
+
+> | name              |  type     | data type      | description                         |
+> |-------------------|-----------|----------------|-------------------------------------|
+> | `name`            |  required | string         | The user's name                     |
+> | `surname`         |  required | string         | The user's surname                  |
+> | `email`           |  required | string         | The user's email                    |
+> | `password`        |  required | string         | The user's password                 |
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`                | JSON object, see Example                                            |
+> | `400`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+
+##### Example
+If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
+
+```json
+{
+  status: "success",
+  msg: "User registered",
+  id: 123
+}
+```
+
+</details>

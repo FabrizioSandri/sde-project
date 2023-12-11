@@ -8,6 +8,9 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.get('/', (req, res) => {
+  res.send('Login business logic is running');
+});
 
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
