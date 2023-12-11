@@ -7,7 +7,7 @@ const oauth_controller = require("../controllers/oauth_controller")
 const onlyAuthenticated = require("../middleware/middleware").onlyAuthenticated
 
 router.get('/', (req, res) => {
-  res.send('Welcome to the authentication interface');
+  res.send('Authentication process centric service is running');
 });
 
 // Get the authentication status

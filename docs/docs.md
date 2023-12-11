@@ -253,3 +253,165 @@ If the status code is `200`, the endpoint returns a JSON object adhering to the 
 ```
 
 </details>
+
+
+------------------------------------------------------------------------------------------
+## Process centric
+
+
+#### Authentication
+
+
+<details>
+ <summary><code>GET</code> <code><b>/</b></code> <code>(check if the service is running)</code></summary>
+
+##### Parameters
+
+> None
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `text/plain;charset=UTF-8`        | Authentication process centric service is running                   |
+
+</details>
+
+
+<details>
+ <summary><code>POST</code> <code><b>/login</b></code> <code>(Normal user login with email and password)</code></summary>
+
+##### Parameters
+
+> | name              |  type     | data type      | description                         |
+> |-------------------|-----------|----------------|-------------------------------------|
+> | `email`           |  required | string         | The user's email                    |
+> | `password`        |  required | string         | The user's password                 |
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`                | JSON object, see Example                                            |
+> | `400`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+
+##### Example
+If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
+
+```json
+{
+  status: "success",
+  msg: "User login successful",
+  token: "eyJ..."
+}
+```
+
+</details>
+
+
+<details>
+ <summary><code>POST</code> <code><b>/registration</b></code> <code>(Normal user registration, with the DB)</code></summary>
+
+##### Parameters
+
+> | name              |  type     | data type      | description                         |
+> |-------------------|-----------|----------------|-------------------------------------|
+> | `name`            |  required | string         | The user's name                     |
+> | `surname`         |  required | string         | The user's surname                  |
+> | `email`           |  required | string         | The user's email                    |
+> | `password`        |  required | string         | The user's password                 |
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`                | JSON object, see Example                                            |
+> | `400`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+
+##### Example
+If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
+
+```json
+{
+  status: "success",
+  msg: "User registered"
+}
+```
+
+</details>
+
+
+<details>
+ <summary><code>GET</code> <code><b>/google/authenticate</b></code> <code>(User login using Google OAuth)</code></summary>
+
+##### Parameters
+
+> None
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`                | JSON object, see Example                                            |
+> | `302`         | `text/html`                       | Redirects to Google OAuth authentication endpoint, then redirects to `/google/callback` |
+> | `400`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+
+
+</details>
+
+
+<details>
+ <summary><code>GET</code> <code><b>/google/callback</b></code> <code>(Callback endpoint called by Google after login)</code></summary>
+
+##### Parameters
+
+> None
+
+The parameters are filled by Google after successfully authenticating.
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `302`         | `text/html`                       | Redirects to `/` if an error occurred during the authentication     |
+
+
+
+##### Example
+If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
+
+```json
+{
+  status: "success",
+  msg: "User login successful",
+  token: "eyJ..."
+}
+```
+
+</details>
+
+<details>
+ <summary><code>GET</code> <code><b>/google/logout</b></code> <code>(Destroys the Google session)</code></summary>
+
+##### Parameters
+
+> None
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`                | JSON object, see Example                                            |
+
+
+
+##### Example
+If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
+
+```json
+{
+  status: "success"
+}
+```
+
+</details>
