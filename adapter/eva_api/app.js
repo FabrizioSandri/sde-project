@@ -9,7 +9,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Set up routes
 app.get('/', (req, res) => {
-  res.send('EVA API adapter');
+  res.send('EVA API adapter is running');
 });
 
 app.get('/checkEmail', async (req, res) => {

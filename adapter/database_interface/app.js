@@ -21,7 +21,7 @@ const pool = mysql.createPool(dbConfig);
 
 // Set up routes
 app.get('/', (req, res) => {
-  res.send('MySQL db interface');
+  res.send('MySQL db interface is running');
 });
 
 // Authentication endpoints: login and registration
