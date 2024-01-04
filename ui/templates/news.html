@@ -54,13 +54,13 @@
                         for (feedId in news) {
 
                             newsContainer.innerHTML +='<h3 class="mt-5 mb-4  text-center">' + news[feedId].feed_title + '</h3>'
-                            for (articleId in news[0].entries) {
-                                let article = news[0].entries[articleId]
+                            for (articleId in news[feedId].entries) {
+                                let article = news[feedId].entries[articleId]
                                 newsContainer.innerHTML += renderArticle(article)
                             }
                         }
 
-                    }
+                    } 
                 };
 
                 xhttp.open("GET", "http://localhost:5003/news", true);
@@ -73,15 +73,15 @@
             }
 
             function renderArticle(article) {
-                
                 html = '<div class="article-row">';
-                html += '<h6><a href='+article.link+'>' + article.title + '</a></h6>';
+                html += '<h4 class="mt-4"><a href=http://localhost/article?url='+encodeURIComponent(article.link)+'>' + article.title + '</a></h4>';
                 html += '<p>' + article.summary + '</p>';
                 html += '<img src= ' + article.media_content + ' class="img-thumbnail">';
+                html += '<a href=http://localhost/article?url='+encodeURIComponent(article.link)+' type="button" class="btn btn-success mt-3 mx-2">Read article</a>'
+                html += '<a href='+article.link+' type="button" class="btn btn-primary mt-3 mx-2">Original article</a>'
                 html += '</div> <hr>';
 
                 return html
-
             }
         </script>
 
@@ -94,20 +94,21 @@
               <a class="p-2 text-dark" href="#">Enterprise</a>
               <a class="p-2 text-dark" href="#">Supporta</a>
               <a class="p-2 text-dark" href="#">Pricing</a>
-            </nav>
-            <div class="form-inline">
-                <input class="form-control mr-sm-2" id="search-text" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0 mr-2" onclick="searchNews()">Search</button>
-            </div>
+            </nav>           
             <a class="btn btn-outline-primary" href="#">Sign up</a>
         </div>
 
         <div class="container">
+         
             <div class="row">
                 <div class="col-sm-2"></div>
                 <div class="col-sm-8">
-                    <h2 class="display-4 mb-4">News</h2>
-
+                    <h2 class="display-4 mb-4 text-center">Football News</h2>
+                    <div class="form-inline justify-content-center">
+                        <input class="form-control mr-sm-2" id="search-text" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0 mr-2" onclick="searchNews()">Search</button>
+                    </div>
+                    <hr>
                     <div id="news-container"></div>
 
                 </div>
