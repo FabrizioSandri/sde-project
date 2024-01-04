@@ -1000,7 +1000,8 @@ If the status code is `200`, the endpoint returns a JSON object adhering to the 
 
 </details>
 
-<summary><code>GET</code> <code><b>/getTeamInfo</b></code> <code>(Get information about a team and filter only a possible response)</code></summary>
+<details>
+ <summary><code>GET</code> <code><b>/getTeamInfo</b></code> <code>(Get information about a team and filter only a possible response)</code></summary>
 
 ##### Parameters
 
@@ -1083,6 +1084,42 @@ If the status code is `200`, the endpoint returns a JSON object adhering to the 
 ```
 
 </details>
+
+##### PLACE FORECAST
+
+<details>
+ <summary><code>GET</code> <code><b>/getTeams</b></code> <code>(Get the weather for a place (stadium) on a specific date)</code></summary>
+
+##### Parameters
+
+> | name              |  type     | data type      | description                         |
+> |-------------------|-----------|----------------|-------------------------------------|
+> | `stadium`         |  required | string         | The league of the teams             |
+> | `matchDate`       |  required | string         | The league of the teams             |
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`                | JSON object, see Example                                            |
+> | `200`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+
+##### Example
+If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
+
+```json
+{
+  status: "success",
+  weather: {
+    "min_temp": 15,
+    "max_temp": 25,
+    "description": 'Clear sky' || 'data still not computed'
+  }
+}
+```
+
+</details>
+
 ------------------------------------------------------------------------------------------
 ## Process centric
 
