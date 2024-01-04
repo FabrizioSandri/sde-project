@@ -3,9 +3,8 @@
     <head>
         <title>Football matches</title>
         
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-                
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">    
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">    
     
         <script>
             function getCookie(name) {
@@ -19,8 +18,34 @@
 
                 let token = getCookie("token");
                 if (token){
-                    msgpar.innerHTML = "Successfully logged in";
-                    // TODO: href to logged home page
+
+                    // check if the token is valid with the remote server
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                        if (this.readyState == 4){
+
+                            let data = JSON.parse(this.responseText)
+                            if (this.status == 200){    // registered
+                                if (data.authenticated){
+                                    msgpar.innerHTML = "Successfully logged in";
+                                    // TODO: href to logged home page
+                                }else{
+                                    msgpar.innerHTML = "The token is invalid";
+                                }
+                            }else{
+                                msgpar.innerHTML = "The token is invalid";
+                            }
+                            
+                        }
+                    }
+
+                    xhttp.open("GET", `http://localhost:5001/isAuthenticated?token=${token}`, true);
+                    xhttp.setRequestHeader('Access-Control-Allow-Origin', '*'); 
+                    xhttp.setRequestHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+                    xhttp.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
+                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    xhttp.send();
+
                 }
             }
 
@@ -58,8 +83,6 @@
                 xhttp.send(`email=${email}&password=${password}`);
             }
 
-            // check if the user is already logged in, e.g. google auth
-            checkAlreadyLoggedIn();
         </script> 
     </head>
     <body style="background-color: rgb(190, 190, 190)">
@@ -94,6 +117,9 @@
             </div>
         </section>
 
-
+        <script>
+            // check if the user is already logged in, e.g. google auth
+            checkAlreadyLoggedIn();
+        </script>
     </body>
 </html>
