@@ -590,9 +590,10 @@ If the status code is `200`, the endpoint returns a JSON object adhering to the 
 
 ##### Parameters
 
-> | name              |  type     | data type      | description                         |
-> |-------------------|-----------|----------------|-------------------------------------|
-> | `teamId`          |  required | string         | The teamId of the team              |
+> | name                  |  type     | data type      | description                            |
+> |-----------------------|-----------|----------------|----------------------------------------|
+> | `teamIds`             |  required | string         | The teamId of the teams                |
+> | `numberOfNextMatches` |  required | string         | Number of the next matches wanted      |
 
 ##### Responses
 
@@ -930,7 +931,158 @@ If the status code is `200`, the endpoint returns a JSON object adhering to the 
 
 </details>
 
+#### FOOTBALL
 
+<details>
+ <summary><code>GET</code> <code><b>/getLeaguesAvailable</b></code> <code>(Get leagues available on the service)</code></summary>
+
+##### Parameters
+
+> none
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`                | JSON object, see Example                                            |
+> | `400`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+
+##### Example
+If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
+
+```json
+{
+  status: "success",
+  leagues:[{
+    id:61
+    name:"Ligue 1"
+    type:"League"
+    logo:"https://media.api-sports.io/football/leagues/61.png"
+   },{
+    id:62
+    name:"Ligue X"
+    type:"League"
+    logo:"https://media.api-sports.io/football/leagues/62.png" 
+   }]
+}
+```
+</details>
+
+<details>
+ <summary><code>GET</code> <code><b>/getTeams</b></code> <code>(Get all the teams in a League)</code></summary>
+
+##### Parameters
+
+> | name              |  type     | data type      | description                         |
+> |-------------------|-----------|----------------|-------------------------------------|
+> | `leagueId`        |  required | string         | The league of the teams             |
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`                | JSON object, see Example                                            |
+> | `200`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+
+##### Example
+If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
+
+```json
+{
+  status: "success",
+  teams: [{
+    {..team_info..},
+    {..team_info..},
+    {..team_info..}
+  }]
+}
+```
+
+</details>
+
+<summary><code>GET</code> <code><b>/getTeamInfo</b></code> <code>(Get information about a team and filter only a possible response)</code></summary>
+
+##### Parameters
+
+> | name              |  type     | data type      | description                         |
+> |-------------------|-----------|----------------|-------------------------------------|
+> | `leagueId`        |  required | string         | The league of the team              |
+> | `teamId`          |  required | string         | The teamId of the team              |
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`                | JSON object, see Example                                            |
+> | `200`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+
+##### Example
+If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
+
+```json
+{
+  status: "success",
+  teamInfo: {
+    team: {..team_info..},
+    venue: {..venue_info..}
+  }
+}
+```
+</details>
+
+<details>
+
+ <summary><code>POST</code> <code><b>/getFixtures</b></code> <code>(Get fixtures of the teams provided with filtered infos)</code></summary>
+
+##### Parameters
+
+> | name                  |  type     | data type      | description                            |
+> |-----------------------|-----------|----------------|----------------------------------------|
+> | `teamIds`             |  required | string         | The teamId of the teams                |
+> | `numberOfNextMatches` |  required | string         | Number of the next matches wanted      |
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`                | JSON object, see Example                                            |
+> | `200`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+
+##### Example
+If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
+
+```json
+{
+  status: "success",
+  matches: [{
+    "matchReferee": "Referee1",
+    "matchDate": "2024-01-04",
+    "stadium": "Stadium1",
+    "city": "City1",
+    "league": "League1",
+    "country": "Country1",
+    "homeTeam": "HomeTeam1",
+    "homeTeamLogoLink": "HomeTeam1LogoLink",
+    "awayTeam": "AwayTeam1",
+    "awayTeamLogoLink": "AwayTeam1LogoLink"
+  },
+  {
+    "matchReferee": "Referee2",
+    "matchDate": "2024-01-05",
+    "stadium": "Stadium2",
+    "city": "City2",
+    "league": "League2",
+    "country": "Country2",
+    "homeTeam": "HomeTeam2",
+    "homeTeamLogoLink": "HomeTeam2LogoLink",
+    "awayTeam": "AwayTeam2",
+    "awayTeamLogoLink": "AwayTeam2LogoLink"
+  }]
+
+}
+```
+
+</details>
 ------------------------------------------------------------------------------------------
 ## Process centric
 
