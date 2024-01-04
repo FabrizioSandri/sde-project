@@ -48,11 +48,14 @@ module.exports.afterLogin = async (req, res) => {
     id: result.id,
     email: req.user.emails[0].value 
   }, process.env.JWT_SECRET);
-  return res.status(200).json({
-    status: "success",
-    msg: "User login successful",
-    token: token
-  });
+  // return res.status(200).json({
+  //   status: "success",
+  //   msg: "User login successful",
+  //   token: token
+  // });
+
+  res.cookie('token', token);
+  return res.redirect("http://localhost/login");
 
 }
 
