@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 import os
 import urllib.request
 from urllib.request import urlopen
+from werkzeug.exceptions import HTTPException
 import json
 
 app = Flask(__name__)
@@ -31,6 +32,19 @@ def get_html():
         feeds.append(feed)
         
     return jsonify(feeds)
+
+@app.errorhandler(HTTPException)
+def handle_exception(e):
+    """Return JSON instead of HTML for HTTP errors."""
+    # start with the correct headers and status code from the error
+    response = e.get_response()
+    # replace the body with JSON
+    response.data = json.dumps({
+        "status": e.name,
+        "msg": e.description,
+    })
+    response.content_type = "application/json"
+    return response
 
 if __name__ == '__main__':
 	app.run(host='0.0.0.0', port=os.environ["NEWS_AGGREGATOR_SERVICE_PORT"])

@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 import os
 from newspaper import Article
 from urllib.parse import unquote 
+from werkzeug.exceptions import HTTPException
 import json
 
 import requests
@@ -40,6 +41,19 @@ def get_article():
     response['image'] = article.top_image
 
     return jsonify(response)
+
+@app.errorhandler(HTTPException)
+def handle_exception(e):
+    """Return JSON instead of HTML for HTTP errors."""
+    # start with the correct headers and status code from the error
+    response = e.get_response()
+    # replace the body with JSON
+    response.data = json.dumps({
+        "status": e.name,
+        "msg": e.description,
+    })
+    response.content_type = "application/json"
+    return response
 
 if __name__ == '__main__':
 	app.run(host='0.0.0.0', port=os.environ["ARTICLE_EXTRACTOR_SERVICE_PORT"])

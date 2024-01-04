@@ -1,6 +1,8 @@
 import feedparser
-from flask import Flask, jsonify
+from flask import Flask, jsonify, abort
 import os
+from werkzeug.exceptions import HTTPException
+import json
 
 app = Flask(__name__)
 
@@ -15,26 +17,29 @@ def fetch_rss_data(url_id):
     """
     Returns the requested feed rss, all with the same structure
     """
-    url = rss_feed_urls[url_id]
-    feed = feedparser.parse(url)    
+    if len(rss_feed_urls) < url_id:
+        abort(404, description="Index out of range")
+    else:
+        url = rss_feed_urls[url_id]
+        feed = feedparser.parse(url)    
 
-    response = {"feed_title": feed.feed.title, "entries": []}
+        response = {"feed_title": feed.feed.title, "entries": []}
 
-    for entry in feed.entries:
-        response["entries"].append({"title": entry.title,
-                                    "link": entry.link,
-                                    "summary": entry.summary})
-        
-        media = None
+        for entry in feed.entries:
+            response["entries"].append({"title": entry.title,
+                                        "link": entry.link,
+                                        "summary": entry.summary})
+            
+            media = None
 
-        if url_id == 1:
-            media = entry.links[0]["href"]
-        elif url_id == 2 or url_id == 3:
-            media = entry.media_content[0]["url"]
-        
-        response["entries"][-1]["media_content"] = media
+            if url_id == 1:
+                media = entry.links[0]["href"]
+            elif url_id == 2 or url_id == 3:
+                media = entry.media_content[0]["url"]
+            
+            response["entries"][-1]["media_content"] = media
 
-    return response
+        return response
 
 # routes 
 
@@ -48,7 +53,11 @@ def return_feeds():
 
 @app.route('/feed/<id>')
 def feed(id):
-    return jsonify(rss_feed_urls[int(id)])
+    if len(rss_feed_urls) < int(id):
+        abort(404, description="Index out of range")
+    else:    
+        feed = rss_feed_urls[int(id)]
+        return jsonify({"feed": feed})
 
 @app.route('/fetch_feed/<id>')
 def fetch_feed(id):
@@ -56,6 +65,22 @@ def fetch_feed(id):
     fetch the news from the selected feed
     """
     return jsonify(fetch_rss_data(int(id)))
+
+
+@app.errorhandler(HTTPException)
+def handle_exception(e):
+    """Return JSON instead of HTML for HTTP errors."""
+    # start with the correct headers and status code from the error
+    response = e.get_response()
+    # replace the body with JSON
+    response.data = json.dumps({
+        "status": e.name,
+        "msg": e.description,
+    })
+    response.content_type = "application/json"
+    return response
+
+
 
 if __name__ == '__main__':
 	app.run(host='0.0.0.0', port=os.environ["RSS_ADAPTER_SERVER_PORT"])

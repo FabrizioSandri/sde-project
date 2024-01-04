@@ -60,7 +60,7 @@ services:
       - FOOTBALL_NEWS_SERVER_PORT
       - NEWS_AGGREGATOR_SERVICE_PORT
       - ARTICLE_EXTRACTOR_SERVICE_PORT
-      - TEXT_SIMILARITIES_SERVER_PORT
+      - NEWS_TEXT_EXTRACTOR_ADAPTER_SERVER_PORT
       - DB_ADAPTER_SERVER_PORT
     ports:
       - ${FOOTBALL_NEWS_SERVER_PORT}:${FOOTBALL_NEWS_SERVER_PORT}
@@ -69,8 +69,7 @@ services:
     depends_on:
       - news_aggregator
       - article_extractor
-      - text_similarities
-      - authentication
+      - news_text_extractor
 
   # Business logic
   login:
@@ -244,9 +243,22 @@ services:
     expose:
       - ${FOOTBALL_ADAPTER_SERVER_PORT}
 
+  news_text_extractor:
+    build: ./adapter/news_text_extractor
+    restart: always
+    environment: 
+      - NEWS_TEXT_EXTRACTOR_ADAPTER_SERVER_PORT
+      - TEXT_SIMILARITIES_SERVER_PORT
+    ports:
+      - ${NEWS_TEXT_EXTRACTOR_ADAPTER_SERVER_PORT}:${NEWS_TEXT_EXTRACTOR_ADAPTER_SERVER_PORT}
+    expose:
+      - ${NEWS_TEXT_EXTRACTOR_ADAPTER_SERVER_PORT}
+    depends_on:
+      - text_similarities
+
   # Data layer
   text_similarities:
-    build: ./adapter/text_similarities
+    build: ./data/text_similarities
     restart: always
     environment: 
       - TEXT_SIMILARITIES_SERVER_PORT

@@ -1,7 +1,8 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
 import os
 from urllib.parse import unquote, quote
 import json
+from werkzeug.exceptions import HTTPException
 
 import requests
 
@@ -9,29 +10,20 @@ app = Flask(__name__)
 
 NEWS_AGGREGATOR_SERVICE_PORT = os.environ["NEWS_AGGREGATOR_SERVICE_PORT"]
 DB_ADAPTER_SERVER_PORT = os.environ["DB_ADAPTER_SERVER_PORT"]
-TEXT_SIMILARITIES_SERVER_PORT = os.environ["TEXT_SIMILARITIES_SERVER_PORT"]
+NEWS_TEXT_EXTRACTOR_ADAPTER_SERVER_PORT = os.environ["NEWS_TEXT_EXTRACTOR_ADAPTER_SERVER_PORT"]
 
 # Utility functions
 
-def get_teams(token):
-    res = requests.get("http://db_adapter:" + DB_ADAPTER_SERVER_PORT + "/getTeams", 
-                       data={"token": token})
-    return res.text
-
 def sort_news(data, word):
 
-    # get all the summaries that will be sent to the text similarites service
-    data_summaries = []
-    for i in data:
-        for j in range(len(i["entries"])):
-            data_summaries.append(quote(i["entries"][j]["summary"]))
-
+    # send all the new to the adapter
     new_data = {
-        'texts': data_summaries,
+        'news': data,
         'word': word
     }         
+    
 
-    res = requests.post("http://text_similarities:" + TEXT_SIMILARITIES_SERVER_PORT + "/findCorrelation", json = new_data)
+    res = requests.post("http://news_text_extractor:" + NEWS_TEXT_EXTRACTOR_ADAPTER_SERVER_PORT + "/searchNews", json = new_data)
 
     data_to_return = []
 
@@ -60,10 +52,10 @@ def get_news():
     auth_token =  request.headers.get('x-access-token')
     sort_word = request.args.get('search', '')
 
-    if not auth_token:
-    #     get_teams(auth_token)
-    # else:
-        return "Token not provided", 401
+    # if not auth_token:
+    # #     get_teams(auth_token)
+    # # else:
+    #     abort(401, description="Token not provided")
     
 
     if res.status_code == 200:
@@ -92,7 +84,21 @@ def get_full_news():
         data = res.json()
         return data, 200
     else:
-        return res.json().error, res.status_code
+        abort(res.status_code, res.json().msg)
+    
+
+@app.errorhandler(HTTPException)
+def handle_exception(e):
+    """Return JSON instead of HTML for HTTP errors."""
+    # start with the correct headers and status code from the error
+    response = e.get_response()
+    # replace the body with JSON
+    response.data = json.dumps({
+        "status": e.name,
+        "msg": e.description,
+    })
+    response.content_type = "application/json"
+    return response
 
 
 if __name__ == '__main__':
