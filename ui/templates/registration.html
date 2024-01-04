@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Football matches</title>
+        
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+                
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">    
+    
+        <script>
+            function register() {
+                let email = document.getElementById("email").value;
+                let password = document.getElementById("password").value;
+                let checkpassword = document.getElementById("checkpassword").value;
+                let name = document.getElementById("name").value;
+                let surname = document.getElementById("surname").value;
+                
+                let msgpar = document.getElementById("msg");
+
+                if (email==null || password==null || checkpassword==null || name==null || surname==null){
+                    msgpar.innerHTML = "Please provide all the required fields";
+                    return;
+                }
+
+                if (password != checkpassword){
+                    msgpar.innerHTML = "The two passwords must match";
+                    return;
+                }
+
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4){
+
+                        let data = JSON.parse(this.responseText)
+                        if (this.status == 200){    // registered
+                            msgpar.innerHTML = "Successfully registered";
+                        }else{
+                            msgpar.innerHTML = data.msg;
+                        }
+                        
+                    }
+                }
+
+                xhttp.open("POST", "http://localhost:5001/registration", true);
+                xhttp.setRequestHeader('Access-Control-Allow-Origin', '*'); 
+                xhttp.setRequestHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+                xhttp.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhttp.send(`email=${email}&password=${password}&name=${name}&surname=${surname}`);
+            }
+        </script>    
+    </head>
+    <body style="background-color: rgb(190, 190, 190)">
+
+        <section class="vh-100">
+            <div class="container py-5 h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                        <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                            <div class="card-body p-5 text-center">
+                                <h1 class="mb-5 fw-bold">Registration</h1>
+
+                                <div class="form-outline mb-4">
+                                    <input type="text" id="email" name="email" placeholder="Email" class="form-control form-control-lg" />
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                    <input type="password" id="password" name="password" placeholder="Password" class="form-control form-control-lg" />
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                    <input type="checkpassword" id="checkpassword" name="checkpassword" placeholder="Retype Password" class="form-control form-control-lg" />
+                                </div>
+                                
+                                <div class="form-outline mb-4">
+                                    <input type="text" id="name" name="name" placeholder="Name" class="form-control form-control-lg" />
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                    <input type="text" id="surname" name="surname" placeholder="Surname" class="form-control form-control-lg" />
+                                </div>
+
+                                <button class="btn btn-success btn-lg btn-block" onclick="register()">Register</button>
+
+                                <p id="msg"></p>
+                                <hr class="my-4">
+                                
+                                <a href="/login" class="btn btn-danger btn-lg btn-block">Back to login</a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+    </body>
+</html>
+
+
