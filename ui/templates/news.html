@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Football news</title>
+        
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">  
+
+        <script>
+
+            function searchNews() {
+                var searchText = document.getElementById("search-text").value;
+
+                if (searchText.trim() != "") {
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            // Typical action to be performed when the document is ready:
+                            let newsContainer = document.getElementById("news-container");
+                            let news = JSON.parse(this.response)
+                            newsContainer.innerHTML = ""
+                            for (articleId in news) {
+                                let article = news[articleId]
+                                newsContainer.innerHTML += renderArticle(article)
+                            }                         
+
+                        }
+                    };
+
+                    xhttp.open("GET", "http://localhost:5003/news?search=" + encodeURIComponent(searchText), true);
+                    xhttp.setRequestHeader('Access-Control-Allow-Origin', '*'); 
+                    xhttp.setRequestHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+                    xhttp.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
+                    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                    xhttp.send(null)
+                } 
+                else 
+                {
+                    getNews()
+                }
+            }
+
+            function getNews() {
+       
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        // Typical action to be performed when the document is ready:
+                        let newsContainer = document.getElementById("news-container");
+                        let news = JSON.parse(this.response)
+
+                        newsContainer.innerHTML = ""
+
+                        for (feedId in news) {
+
+                            newsContainer.innerHTML +='<h3 class="mt-5 mb-4  text-center">' + news[feedId].feed_title + '</h3>'
+                            for (articleId in news[0].entries) {
+                                let article = news[0].entries[articleId]
+                                newsContainer.innerHTML += renderArticle(article)
+                            }
+                        }
+
+                    }
+                };
+
+                xhttp.open("GET", "http://localhost:5003/news", true);
+                xhttp.setRequestHeader('Access-Control-Allow-Origin', '*'); 
+                xhttp.setRequestHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+                xhttp.setRequestHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With')
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhttp.send(null)
+
+            }
+
+            function renderArticle(article) {
+                
+                html = '<div class="article-row">';
+                html += '<h6><a href='+article.link+'>' + article.title + '</a></h6>';
+                html += '<p>' + article.summary + '</p>';
+                html += '<img src= ' + article.media_content + ' class="img-thumbnail">';
+                html += '</div> <hr>';
+
+                return html
+
+            }
+        </script>
+
+    </head>
+    <body>
+        <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+            <h5 class="my-0 mr-md-auto font-weight-normal">Football teams</h5>
+            <nav class="my-2 my-md-0 mr-md-3">
+              <a class="p-2 text-dark" href="#">Features</a>
+              <a class="p-2 text-dark" href="#">Enterprise</a>
+              <a class="p-2 text-dark" href="#">Supporta</a>
+              <a class="p-2 text-dark" href="#">Pricing</a>
+            </nav>
+            <div class="form-inline">
+                <input class="form-control mr-sm-2" id="search-text" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0 mr-2" onclick="searchNews()">Search</button>
+            </div>
+            <a class="btn btn-outline-primary" href="#">Sign up</a>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-8">
+                    <h2 class="display-4 mb-4">News</h2>
+
+                    <div id="news-container"></div>
+
+                </div>
+                <div class="col-sm-2"></div>
+
+            </div>
+
+
+
+        </div>
+        <script>
+
+            window.onload = (event) => {
+                console.log("page is fully loaded");
+                getNews();
+            };
+        </script>
+
+    </body>
+</html>

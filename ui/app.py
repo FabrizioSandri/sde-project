@@ -24,5 +24,9 @@ def login():
 def registration():    
     return render_template("registration.html")
 
+@app.route('/news')
+def news():    
+    return render_template("news.html")
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=os.environ['UI_PORT'])

@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, abort
+from flask_cors import CORS
 import os
 from urllib.parse import unquote, quote
 import json
@@ -7,6 +8,7 @@ from werkzeug.exceptions import HTTPException
 import requests
 
 app = Flask(__name__)
+CORS(app)
 
 NEWS_AGGREGATOR_SERVICE_PORT = os.environ["NEWS_AGGREGATOR_SERVICE_PORT"]
 DB_ADAPTER_SERVER_PORT = os.environ["DB_ADAPTER_SERVER_PORT"]
