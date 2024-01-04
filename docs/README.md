@@ -378,7 +378,7 @@ If the status code is `200`, the endpoint returns a JSON object that contains th
 
 > | name              |  type     | data type      | description                                                |
 > |-------------------|-----------|----------------|------------------------------------------------------------|
-> | `news`            |  required | []             | Array of news from which the summaries is extracted         |
+> | `news`            |  required | []             | Array of news from which the summaries is extracted        |
 > | `word`            |  required | string         | Search criteria                                            |
 
 ##### Responses
@@ -401,6 +401,238 @@ If the status code is `200`, the endpoint returns a JSON object adhering to the 
 ```
 
 </details>
+
+#### FOOTBALL Adapter
+
+<details>
+ <summary><code>GET</code> <code><b>/getLeagues</b></code> <code>(get all the leagues available for the current year)</code></summary>
+
+##### Parameters
+
+> None
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`	 	             | JSON object, see Example                                            |
+> | `200`         | `application/json` 		             | `{status: "error", msg: ".. error msg .. "}`                        |
+
+##### Example
+If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
+
+```json
+{
+  status: "success",
+  leagues: [{
+    league: {..league_info..},
+    country: {..country_info..},
+    season: [{..season_info}]
+  },{
+    league: {..league_info..},
+    country: {..country_info..},
+    season: [{..season_info}]
+  }]
+}
+```
+</details>
+
+<details>
+ <summary><code>GET</code> <code><b>/getTeams</b></code> <code>(Get information of all the teams in a League in the current season)</code></summary>
+
+##### Parameters
+
+> | name              |  type     | data type      | description                         |
+> |-------------------|-----------|----------------|-------------------------------------|
+> | `leagueId`        |  required | string         | The league of the teams             |
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`                | JSON object, see Example                                            |
+> | `200`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+
+##### Example
+If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
+
+```json
+{
+  status: "success",
+  teams: [{
+    team: {..team_info..},
+    venue: {..venue_info..}
+  },{
+    team: {..team_info..},
+    venue: {..venue_info..}
+  }]
+}
+```
+
+</details>
+
+<details>
+
+ <summary><code>GET</code> <code><b>/getTeamInfoById</b></code> <code>(Get information about a team for which only the leagueId and teamId are known)</code></summary>
+
+##### Parameters
+
+> | name              |  type     | data type      | description                         |
+> |-------------------|-----------|----------------|-------------------------------------|
+> | `leagueId`        |  required | string         | The league of the team              |
+> | `teamId`          |  required | string         | The teamId of the team              |
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`                | JSON object, see Example                                            |
+> | `200`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+
+##### Example
+If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
+
+```json
+{
+  status: "success",
+  teamInfo: {
+    team: {..team_info..},
+    venue: {..venue_info..}
+  }
+}
+```
+
+</details>
+
+<details>
+
+ <summary><code>POST</code> <code><b>/getFixtures</b></code> <code>(Get fixtures of the teams provided)</code></summary>
+
+##### Parameters
+
+> | name              |  type     | data type      | description                         |
+> |-------------------|-----------|----------------|-------------------------------------|
+> | `teamId`          |  required | string         | The teamId of the team              |
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`                | JSON object, see Example                                            |
+> | `200`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+
+##### Example
+If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
+
+```json
+{
+  status: "success",
+  matches: [{
+    fixture: {..fixture_info..},
+    league: {..league_info..},
+    teams: {..teams_info..},
+    goals: {..goals_info..},
+    score: {..score_info..}
+  },{
+   fixture: {..fixture_info..},
+    league: {..league_info..},
+    teams: {..teams_info..},
+    goals: {..goals_info..},
+    score: {..score_info..}
+  }]
+}
+```
+
+</details>
+
+#### POSITIONSTACK Adapter
+
+<details>
+ <summary><code>GET</code> <code><b>/getCoordinates</b></code> <code>(Get the coordinates of a place)</code></summary>
+
+##### Parameters
+
+> | name              |  type     | data type      | description                                      		      |
+> |-------------------|-----------|----------------|----------------------------------------------------------|
+> | `place`           |  required | string         | The place for which the coodinates are needed            |
+
+##### Responses
+
+> | http code     | content-type                      | response                                                     |
+> |---------------|-----------------------------------|--------------------------------------------------------------|
+> | `200`         | `application/json`	 	             | JSON object, see Example                                     |
+> | `200`         | `application/json` 		             | `{status: "error", msg: ".. error msg .. "}`                 |
+
+##### Example
+If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
+
+```json
+{
+  status: "success",
+  data:{
+     "latitude": 38.897675,
+     "longitude": -77.036547,
+     "label": "1600 Pennsylvania Avenue NW, Washington, DC, USA",
+     "name": "1600 Pennsylvania Avenue NW",
+     "type": "address",
+     "number": "1600",
+     "street": "Pennsylvania Avenue NW",
+     "postal_code": "20500",
+     "confidence": 1,
+     "region": "District of Columbia",
+     "region_code": "DC",
+     "administrative_area": null,
+     "neighbourhood": "White House Grounds",
+     "country": "United States",
+     "country_code": "US"
+  }
+}
+```
+</details>
+
+#### WEATHER Adapter
+
+<details>
+ <summary><code>GET</code> <code><b>/getWeather</b></code> <code>(Get forecast of a place for the next 16 days)</code></summary>
+
+##### Parameters
+
+> | name              |  type     | data type      | description                         		      |
+> |-------------------|-----------|----------------|---------------------------------------------|
+> | `lat`             |  required | string         | Latitude of the place			  	                 |
+> | `lon`             |  required | string         | Longitude of the place			  	                |
+
+
+##### Responses
+
+> | http code     | content-type                      | response                                                     |
+> |---------------|-----------------------------------|--------------------------------------------------------------|
+> | `200`         | `application/json`	 	             | JSON object, see Example                                     |
+> | `200`         | `application/json` 		             | `{status: "error", msg: ".. error msg .. "}`                 |
+
+##### Example
+If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
+
+```json
+{
+  status: "success",
+  data:{
+     app_max_temp:-2.1
+     app_min_temp:-10
+     clouds:44
+     clouds_hi:0
+     ...
+
+     ...
+     weather: {
+       description:"Broken clouds",
+       weather_info
+    }
+  }
+}
+```
+</details>
+
 ------------------------------------------------------------------------------------------
 
 ## Business Logic
