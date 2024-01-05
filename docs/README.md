@@ -205,7 +205,7 @@ If the status code is `200`, the endpoint returns a JSON object adhering to the 
 
 > | name              |  type     | data type      | description                         |
 > |-------------------|-----------|----------------|-------------------------------------|
-> | `token`           |  required | string         | Token contianing the user ID        |
+> | `token`           |  required | string         | Token containing the user ID        |
 > | `teamId`          |  required | string         | The team ID                         |
 > | `leagueId`        |  required | string         | The league ID of the team           |
 
@@ -226,7 +226,7 @@ If the status code is `200`, the endpoint returns a JSON object adhering to the 
 
 > | name              |  type     | data type      | description                         |
 > |-------------------|-----------|----------------|-------------------------------------|
-> | `token`           |  required | string         | Token contianing the user ID        |
+> | `token`           |  required | string         | Token containing the user ID        |
 > | `teamId`          |  required | string         | The team ID                         |
 
 
@@ -246,7 +246,7 @@ If the status code is `200`, the endpoint returns a JSON object adhering to the 
 
 > | name              |  type     | data type      | description                         |
 > |-------------------|-----------|----------------|-------------------------------------|
-> | `token`           |  required | string         | Token contianing the user ID        |
+> | `token`           |  required | string         | Token containing the user ID        |
 > | `teamId`          |  required | string         | The team ID                         |
 
 
@@ -945,7 +945,7 @@ If the status code is `200`, the endpoint returns a JSON object adhering to the 
 > | http code     | content-type                      | response                                                            |
 > |---------------|-----------------------------------|---------------------------------------------------------------------|
 > | `200`         | `application/json`                | JSON object, see Example                                            |
-> | `400`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+> | `200`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
 
 ##### Example
 If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
@@ -1392,6 +1392,241 @@ If the status code is `200`, the endpoint returns a JSON object adhering to the 
   title: "article title",
   text: "article text",
   image: "image's url"
+}
+```
+
+</details>
+
+#### Football Matches
+
+<details>
+ <summary><code>GET</code> <code><b>/userTeamsOfInterest</b></code> <code>(Get all the the teams of interests of the user)</code></summary>
+
+##### Parameters
+
+> | name              |  type     | data type      | description                         |
+> |-------------------|-----------|----------------|-------------------------------------|
+> | `token`           |  required | string         | Token containing the user ID        |
+
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`                | JSON object, see Example                                            |
+> | `200`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+
+##### Example
+If the status code is `200` and the search parameter is empty, all the news will be returned. Otherwise, the service will respond with the 
+10 news most similar to the search criteria.
+
+In the first case the returned json will be as follow:
+
+```json
+{
+  status: "success",
+  result:[{
+    userId:1,
+    teamId:2,
+    leagueId:3
+   },{
+    userId:1,
+    teamId:4,
+    leagueId:5
+   }]
+  }
+}
+```
+
+</details>
+
+<details>
+ <summary><code>POST</code> <code><b>/addTeamOfInterest</b></code> <code>(Add a new team to the interests of the user)</code></summary>
+
+##### Parameters
+
+> | name              |  type     | data type      | description                         |
+> |-------------------|-----------|----------------|-------------------------------------|
+> | `token`           |  required | string         | Token containing the user ID        |
+> | `teamId`          |  required | string         | The team ID                         |
+> | `leagueId`        |  required | string         | The league ID of the team           |
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`                | `{status: "success", msg: "team added"}`                            |
+> | `200`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+
+</details>
+
+<details>
+ <summary><code>POST</code> <code><b>/removeTeamOfInterest</b></code> <code>(Remove a team from the interests of the user)</code></summary>
+
+##### Parameters
+
+> | name              |  type     | data type      | description                         |
+> |-------------------|-----------|----------------|-------------------------------------|
+> | `token`           |  required | string         | Token containing the user ID        |
+> | `teamId`          |  required | string         | The team ID                         |
+
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`                | `{status: "success", msg: "team deleted"}`                          |
+> | `200`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+
+</details>
+
+<details>
+ <summary><code>GET</code> <code><b>/getLeaguesAvailable</b></code> <code>(Get leagues available on the service)</code></summary>
+
+##### Parameters
+
+> none
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`                | JSON object, see Example                                            |
+> | `200`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+
+##### Example
+If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
+
+```json
+{
+  status: "success",
+  leagues:[{
+    id:61
+    name:"Ligue 1"
+    type:"League"
+    logo:"https://media.api-sports.io/football/leagues/61.png"
+   },{
+    id:62
+    name:"Ligue X"
+    type:"League"
+    logo:"https://media.api-sports.io/football/leagues/62.png" 
+   }]
+}
+```
+</details>
+
+
+<details>
+ <summary><code>GET</code> <code><b>/getTeamsByLeagueId</b></code> <code>(Get all the teams in a League)</code></summary>
+
+##### Parameters
+
+> | name              |  type     | data type      | description                         |
+> |-------------------|-----------|----------------|-------------------------------------|
+> | `leagueId`        |  required | string         | The league of the teams             |
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`                | JSON object, see Example                                            |
+> | `200`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+
+##### Example
+If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
+
+```json
+{
+  status: "success",
+  teams: [{
+    {..team_info..},
+    {..team_info..},
+    {..team_info..}
+  }]
+}
+```
+
+</details>
+
+<summary><code>GET</code> <code><b>/getTeamInfoById</b></code> <code>(Get information about a team and filter only a possible response)</code></summary>
+
+##### Parameters
+
+> | name              |  type     | data type      | description                         |
+> |-------------------|-----------|----------------|-------------------------------------|
+> | `leagueId`        |  required | string         | The league of the team              |
+> | `teamId`          |  required | string         | The teamId of the team              |
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`                | JSON object, see Example                                            |
+> | `200`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+
+##### Example
+If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
+
+```json
+{
+  status: "success",
+  teamInfo: {
+    team: {..team_info..},
+    venue: {..venue_info..}
+  }
+}
+```
+</details>
+
+<details>
+
+ <summary><code>POST</code> <code><b>/getMatchesOfInterest</b></code> <code>(Get fixtures of the teams provided with filtered infos)</code></summary>
+
+##### Parameters
+
+> | name                  |  type     | data type      | description                            |
+> |-----------------------|-----------|----------------|----------------------------------------|
+> | `token  `             |  required | string         | Token containing the user ID           |
+> | `numberOfNextMatches` |  required | string         | Number of the next matches wanted      |
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`                | JSON object, see Example                                            |
+> | `200`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+
+##### Example
+If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
+
+```json
+{
+  status: "success",
+  matches: [{
+    "matchReferee": "Referee1",
+    "matchDate": "2024-01-04",
+    "stadium": "Stadium1",
+    "city": "City1",
+    "league": "League1",
+    "country": "Country1",
+    "homeTeam": "HomeTeam1",
+    "homeTeamLogoLink": "HomeTeam1LogoLink",
+    "awayTeam": "AwayTeam1",
+    "awayTeamLogoLink": "AwayTeam1LogoLink"
+  },
+  {
+    "matchReferee": "Referee2",
+    "matchDate": "2024-01-05",
+    "stadium": "Stadium2",
+    "city": "City2",
+    "league": "League2",
+    "country": "Country2",
+    "homeTeam": "HomeTeam2",
+    "homeTeamLogoLink": "HomeTeam2LogoLink",
+    "awayTeam": "AwayTeam2",
+    "awayTeamLogoLink": "AwayTeam2LogoLink"
+  }]
+
 }
 ```
 
