@@ -10,9 +10,9 @@ router.get('/getTeamInfoById', footballController.getTeamInfoById);
 router.post('/getMatchesOfInterest', footballController.getMatchesOfInterest);
 
 // teamsManager
-router.post('/userTeams', teamsManager.userTeams);
-router.post('/addTeam', teamsManager.addTeam);
-router.post('/removeTeam', teamsManager.removeTeam);
+router.get('/userTeamsOfInterest', teamsManager.userTeamsOfInterest);
+router.post('/addTeamOfInterest', teamsManager.addTeamOfInterest);
+router.post('/removeTeamOfInterest', teamsManager.removeTeamOfInterest);
 
 
 module.exports = router;

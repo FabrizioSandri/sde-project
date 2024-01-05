@@ -1,7 +1,7 @@
 const axios = require('axios');
 
-module.exports.userTeams = (req,res)=>{
-    if(!req.body.token){
+module.exports.userTeamsOfInterest = (req,res)=>{
+    if(!req.query.token){
         return res.status(200).json({
             status:'error',
             msg:'token not provided'
@@ -12,7 +12,7 @@ module.exports.userTeams = (req,res)=>{
         method: 'GET',
         url: db_endpoint,
         params: {
-          token: req.body.token
+          token: req.query.token
         }
     }
     axios.request(options)
@@ -36,7 +36,7 @@ module.exports.userTeams = (req,res)=>{
     })
 };
 
-module.exports.addTeam = (req,res)=>{
+module.exports.addTeamOfInterest = (req,res)=>{
     if(!req.body.token){
         return res.status(200).json({
             status:'error',
@@ -80,7 +80,7 @@ module.exports.addTeam = (req,res)=>{
     })
 };
 
-module.exports.removeTeam = (req,res)=>{
+module.exports.removeTeamOfInterest = (req,res)=>{
     if(!req.body.token){
         return res.status(200).json({
             status:'error',
