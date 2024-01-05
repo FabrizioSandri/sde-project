@@ -27,14 +27,9 @@ app.get('/getWeatherMatches', (req, res) => {
     };
     axios.request(options_stackpoint)
     .then((result)=>{
-      if(result.data.status != "success"){
-        return res.status(200).json({
-          status: 'error',
-          msg: result.data.msg
-        })
-      }
+      
       if (!result.data.data.latitude || !result.data.data.longitude){
-        return res.status(200).json({
+        return res.status(400).json({
           status: "error",
           msg: "coordinates of the stadium not found"
         });
@@ -51,30 +46,24 @@ app.get('/getWeatherMatches', (req, res) => {
 
       axios.request(options_weather)
       .then((result) => {
-        if(result.data.status != "success"){
-          return res.status(200).json({
-            status: 'error',
-            msg: result.data.msg
-          })
-        }
         let weatherForecast = filterWeatherForecast(result.data.data.data,  req.query.matchDate);
         return res.status(200).json({
           status: "success",
           weather: weatherForecast
         });
       })
-      .catch((err)=>{
-        return res.status(200).json({
+      .catch((error)=>{
+        return res.status(400).json({
           status: 'error',
-          msg: err
+          msg: error.response
         });
       });
 
     })
-    .catch((err)=>{
-      return res.status(200).json({
-        status:'error',
-        msg: err
+    .catch((error)=>{
+      return res.status(400).json({
+        status: 'error',
+        msg: error.response
       });
     });
   })

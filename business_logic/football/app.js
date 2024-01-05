@@ -17,12 +17,6 @@ app.get('/getLeaguesAvailable',(req,res)=>{
   };
   axios.request(options)
   .then(response => {
-    if(response.data.status != "success"){
-      return res.status(200).json({
-        status:'error',
-        msg: response.data.msg
-      })
-    }
 
     let leagues = filterLeaguesInfo(response.data.leagues);
     return res.status(200).json({
@@ -31,9 +25,9 @@ app.get('/getLeaguesAvailable',(req,res)=>{
     })
   })
   .catch(error => {
-    return res.status(200).json({
+    return res.status(400).json({
       status:'error',
-      msg: error
+      msg: error.response
     })
   });
 })
@@ -50,12 +44,6 @@ app.get('/getTeamsOfLeague',(req,res)=>{
 
   axios.request(options)
   .then(response => {
-    if(response.data.status != "success"){
-      return res.status(200).json({
-        status:'error',
-        msg: response.data.msg
-      })
-    }
     let teams = filterTeamsInfo(response.data.teams);
     return res.status(200).json({
       status:'success',
@@ -63,9 +51,9 @@ app.get('/getTeamsOfLeague',(req,res)=>{
     })
   })
   .catch(error => {
-    return res.status(200).json({
+    return res.status(400).json({
       status:'error',
-      msg: error
+      msg: error.response
     })
   });
 })
@@ -83,21 +71,15 @@ app.get('/getTeamInfo',(req,res)=>{
 
   axios.request(options)
   .then(response => {
-    if(response.data.status != "success"){
-      return res.status(200).json({
-        status:'error',
-        msg: response.data.msg
-      })
-    }
     return res.status(200).json({
       status:'success',
       teamInfo:response.data.teamInfo[0]
     })
   })
   .catch(error => {
-    return res.status(200).json({
+    return res.status(400).json({
       status:'error',
-      msg: error
+      msg: error.response
     })
   });
 })
@@ -116,12 +98,6 @@ app.post('/getInfoMatches', (req, res) => {
   
     axios.request(options)
     .then(response => {
-      if(response.data.status != "success"){
-        return res.status(200).json({
-          status:'error',
-          msg: response.data.msg
-        })
-      }
       let filteredMatches = filterMatches(response.data.matches);
 
       return res.status(200).json({
@@ -130,12 +106,12 @@ app.post('/getInfoMatches', (req, res) => {
         })
     })
     .catch(error => {
-      return res.status(200).json({
+      return res.status(400).json({
         status: 'error',
-        msg: error
+        msg: error.response
       })
     });
-  });
+});
   
 // Start the server
 const PORT = process.env.FOOTBALL_SERVICE_PORT || 3000;

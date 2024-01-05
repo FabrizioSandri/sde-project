@@ -9,21 +9,15 @@ module.exports.getLeagues = (req, res) => {
     
     axios.request(options)
     .then(response => {
-        if(response.data.status != "success"){
-            return res.status(200).json({
-                status: 'error',
-                msg: response.data.msg
-            });
-        }
         return res.status(200).json({
             status:'success',
             leagues:response.data.leagues
         })  
     })
     .catch(error => {
-        return res.status(200).json({
+        return res.status(400).json({
             status:'error',
-            msg: error
+            msg: error.response
         })
     });
 };
@@ -31,7 +25,7 @@ module.exports.getLeagues = (req, res) => {
 module.exports.getTeamsByLeagueId = (req, res) => {
     let football_endpoint = `http://football:${process.env.FOOTBALL_SERVICE_PORT}/getTeamsOfLeague`;
     if(!req.query.leagueId){
-        return res.status(200).json({
+        return res.status(400).json({
             status: 'error',
             msg: 'no league id provided'
         });
@@ -46,21 +40,15 @@ module.exports.getTeamsByLeagueId = (req, res) => {
     
     axios.request(options)
     .then(response => {
-        if(response.data.status != "success"){
-            return res.status(400).json({
-                status: 'error',
-                msg: response.data.msg
-            });
-        }
         return res.status(200).json({
             status:'success',
             teams:response.data.teams
         })  
     })
     .catch(error => {
-        res.status(200).json({
+        res.status(400).json({
             status:'error',
-            msg: error
+            msg: error.response
         })
     });
 };
@@ -69,7 +57,7 @@ module.exports.getTeamInfoById = (req, res) => {
 
     let football_endpoint = `http://football:${process.env.FOOTBALL_SERVICE_PORT}/getTeamInfo`;
     if(!req.query.teamId || !req.query.leagueId){
-        return res.status(200).json({
+        return res.status(400).json({
             status:'error',
             msg: 'no league id provided'
         });
@@ -85,35 +73,29 @@ module.exports.getTeamInfoById = (req, res) => {
     
     axios.request(options)
     .then(response => {
-        if(response.data.status != "success"){
-            return res.status(200).json({
-                status: 'error',
-                msg: response.data.msg
-            });
-        }
         return res.status(200).json({
             status:'success',
             teamInfo:response.data.teamInfo
         })  
     })
     .catch(error => {
-        res.status(200).json({
+        res.status(400).json({
             status:'error',
-            msg: error
+            msg: error.response
         })
     });
 };
 
 module.exports.getMatchesOfInterest = (req,res)=>{
     if(!req.body.token){
-        return res.status(200).json({
+        return res.status(401).json({
             status:'error',
             msg:'token not provided'
         });
     }
 
     if(!req.body.numberOfMatches || req.body.numberOfMatches >= 40 || req.body.numberOfMatches <= 0){
-        return res.status(200).json({
+        return res.status(400).json({
             status:'error',
             msg:'invalid number of matches'
         });
@@ -129,12 +111,6 @@ module.exports.getMatchesOfInterest = (req,res)=>{
     }
     axios.request(options)
     .then(async (response) => {
-        if(response.data.status != "success"){
-            return res.status(200).json({
-                status: 'error',
-                msg: response.data.msg
-            });
-        }
         let options;
         let completeMatchesWithInfo=[];
         let teamIds=[];
@@ -154,12 +130,6 @@ module.exports.getMatchesOfInterest = (req,res)=>{
         };
         try {
             let {data: data} = await axios.request(options);
-            if(data.status != "success"){
-                return res.status(200).json({
-                    status:'error',
-                    msg:'error in retrieving matches'
-                });
-            }
 
             const placeforecast_endpoint = `http://place_forecast:${process.env.PLACEFORECAST_SERVICE_PORT}/getWeatherMatches`;
             for(match of data.matches){
@@ -172,26 +142,20 @@ module.exports.getMatchesOfInterest = (req,res)=>{
                     }
                 };
                 try {
-                    
                     const {data: weatherResp} = await axios.request(options);
-                    if(weatherResp.status != "success"){
-                        match.weather=weatherResp.msg;
-                    }
-                    else{
-                        match.weather=weatherResp.weather;
-                    }
+                    match.weather=weatherResp.weather;
                     completeMatchesWithInfo.push(match);
                 } catch (error) {
-                    return res.status(200).json({
+                    return res.status(400).json({
                         status: 'error',
-                        msg: error
+                        msg: error.response
                     });
                 }
             }
         } catch (error) {
-            return res.status(200).json({
+            return res.status(400).json({
                 status: 'error',
-                msg: error
+                msg: error.response
             });
         }
         
@@ -201,9 +165,9 @@ module.exports.getMatchesOfInterest = (req,res)=>{
         })
     })
     .catch(error=>{
-        return res.status(200).json({
+        return res.status(400).json({
             status: "error",
-            msg: error
+            msg: error.response
         });
     })
 

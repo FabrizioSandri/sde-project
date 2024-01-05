@@ -5,7 +5,7 @@ const app = express();
 
 app.get('/getWeather',(req,res)=>{
     if (!req.query.lat || ! req.query.lon){
-      return res.status(200).json({
+      return res.status(400).json({
           status:'error',
           msg:'one or more coordinates are missing'
       });
@@ -32,7 +32,7 @@ app.get('/getWeather',(req,res)=>{
         })
       })
       .catch((err)=>{
-        return res.status(200).json({
+        return res.status(400).json({
           status: 'error',
           msg: err
       })
