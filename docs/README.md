@@ -1554,8 +1554,9 @@ If the status code is `200`, the endpoint returns a JSON object adhering to the 
 ```
 
 </details>
+<details>
 
-<summary><code>GET</code> <code><b>/getTeamInfoById</b></code> <code>(Get information about a team and filter only a possible response)</code></summary>
+  <summary><code>GET</code> <code><b>/getTeamInfoById</b></code> <code>(Get information about a team and filter only a possible response)</code></summary>
 
 ##### Parameters
 
