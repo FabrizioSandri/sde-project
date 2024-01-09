@@ -905,7 +905,7 @@ If the status code is `200`, the endpoint returns a JSON object adhering to the 
 
 
 <details>
- <summary><code>GET</code> <code><b>/article</b></code> <code>(Get all the news from the different rss feeds)</code></summary>
+ <summary><code>GET</code> <code><b>/article</b></code> <code>(Get the news elements (title, text, image) from the html text)</code></summary>
 
 ##### Parameters
 
