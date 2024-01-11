@@ -1,24 +1,59 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Football matches</title>
-        
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">  
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Football Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
 
-    </head>
-    <body>
+        .card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
 
-        <div class="container">
-            <h2>Home page</h2>
+        .card-body {
+            text-align: center;
+        }
 
-            
-            <a href="/login" class="btn btn-primary btn-lg btn-block">Login</a>
-            <a href="/registration" class="btn btn-primary btn-lg btn-block">Registration</a>
-            <hr />
-            <a href="/privateArea" class="btn btn-primary btn-lg btn-block">Private Area</a>
 
+        .slogan {
+            font-size: 18px;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="text-center mb-4">Welcome to Football Dashboard</h2>
+                        <p class="slogan">
+                            Stay informed on the latest updates and news about your favorite teams, all conveniently aggregated in one place.
+                        </p>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <a href="/login" class="btn btn-success btn-lg btn-block">Login</a>
+                            </div>
+                            <div class="col-md-6">
+                                <a href="/registration" class="btn btn-success btn-lg btn-block">Register</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+    </div>
 
-    </body>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</body>
 </html>

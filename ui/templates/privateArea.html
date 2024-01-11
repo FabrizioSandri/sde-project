@@ -1,11 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <title>Private area</title>
-        
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Private Area</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">  
 
+        <style>
+            .welcome-container {
+                text-align: center;
+                margin-top: 50px;
+                padding-top: 56px;
+            }
+
+            .bullet-points {
+                text-align: left;
+            }
+        </style>
         <script>
             function getCookie(name) {
                 const value = `; ${document.cookie}`;
@@ -48,14 +59,25 @@
     <body>
         <!-- Nav Bar -->
         {% include "navbar.html" %}
-
-        <div class="container">
-            <h2>Welcome back!</h2>
-            <p id="welcome"></p>
-
+    
+        <div class="container welcome-container">
+            <h2 id="welcome"></h2>
+            <div class="bullet-points">
+                <ul>
+                    <li>Manage your favorite teams in <a href="/manageTeams">My Teams</a> to stay updated on their activities.</li>
+                    <li>Explore <a href="footballFixtures">Next Matches</a> for details on upcoming games, including team information, stadium details, and even the weather forecast for match day.</li>
+                    <li>Stay informed with the latest football news and discover specific updates in the <a href="news">News</a> section.</li>
+                </ul>
+            </div>
+            
         </div>
+    
         <script>
             getAuthenticationParams();
         </script>
+    
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     </body>
 </html>
