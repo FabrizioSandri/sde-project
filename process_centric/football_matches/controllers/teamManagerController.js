@@ -69,7 +69,6 @@ module.exports.addTeamOfInterest = (req,res)=>{
 };
 
 module.exports.removeTeamOfInterest = (req,res)=>{
-    console.log(req.body);
     if(!req.body.token){
         return res.status(401).json({
             status:'error',

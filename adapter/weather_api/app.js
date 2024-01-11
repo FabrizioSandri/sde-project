@@ -25,7 +25,6 @@ app.get('/getWeather',(req,res)=>{
     };
     axios.request(options)
     .then((result)=>{
-      console.log(result.toString());
       return res.status(200).json({
         status:"success",
         data: result.data

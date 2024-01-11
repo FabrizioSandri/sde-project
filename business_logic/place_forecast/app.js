@@ -52,7 +52,6 @@ app.get('/getWeatherMatches', (req, res) => {
         });
       })
       .catch((error)=>{
-        console.log("error at weather retriving"+error);
         return res.status(400).json({
           status: 'error',
           msg: error
@@ -61,7 +60,6 @@ app.get('/getWeatherMatches', (req, res) => {
 
     })
     .catch((error)=>{
-      console.log(error);
       return res.status(400).json({
         status: 'error',
         msg: error
@@ -80,7 +78,6 @@ app.listen(PORT, () => {
 function filterWeatherForecast(forecasts, date){
 
   const truncatedDate = (date.toString()).slice(0, 10);
-  console.log("data:"+truncatedDate)
   for (const forecast of forecasts){
     if( forecast.datetime == truncatedDate){
       return {
