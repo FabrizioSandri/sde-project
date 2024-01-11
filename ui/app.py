@@ -24,6 +24,10 @@ def login():
 def registration():    
     return render_template("registration.html")
 
+@app.route('/privateArea')
+def privateArea():    
+    return render_template("privateArea.html")
+
 @app.route('/news')
 def news():    
     return render_template("news.html")

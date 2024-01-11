@@ -1285,6 +1285,41 @@ If the status code is `200`, the endpoint returns a JSON object adhering to the 
 
 </details>
 
+
+<details>
+ <summary><code>GET</code> <code><b>/isAuthenticated</b></code> <code>(Checks if a user is authenticated)</code></summary>
+
+##### Parameters
+
+> | name              |  type     | data type      | description                         |
+> |-------------------|-----------|----------------|-------------------------------------|
+> | `token`           |  required | string         | The JWT token                       |
+
+##### Responses
+
+> | http code     | content-type                      | response                                                            |
+> |---------------|-----------------------------------|---------------------------------------------------------------------|
+> | `200`         | `application/json`                | JSON object, see Example                                            |
+
+
+
+##### Example
+If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
+
+```json
+{
+  "status": "success",
+  "authenticated": true,
+  "data": {
+    "id": 6,
+    "email": "prova1@gmail.com",
+    "iat": 1705003554
+  }
+}
+```
+
+</details>
+
 #### Football news
 <details>
  <summary><code>GET</code> <code><b>/</b></code> <code>(check if the service is running)</code></summary>

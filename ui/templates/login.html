@@ -28,7 +28,7 @@
                             if (this.status == 200){    // registered
                                 if (data.authenticated){
                                     msgpar.innerHTML = "Successfully logged in";
-                                    // TODO: href to logged home page
+                                    window.location.href = "/privateArea";
                                 }else{
                                     msgpar.innerHTML = "The token is invalid";
                                 }
@@ -68,6 +68,7 @@
                         if (this.status == 200){    // registered
                             msgpar.innerHTML = "Successfully logged in";
                             document.cookie += `token=${data.token}`;
+                            window.location.href = "/privateArea";
                         }else{
                             msgpar.innerHTML = data.msg;
                         }
