@@ -37,49 +37,52 @@
         })
           .then(response => response.json())
           .then(data => {
-            // Loop through the array of teams and make a request for each team
-            if (data.hasOwnProperty("result")){
-              data.result.forEach(team => {
-                            if (team.hasOwnProperty("teamId") && team.hasOwnProperty("leagueId")){
-                                fetch(`http://localhost:5002/getTeamInfoById?teamId=${team.teamId}&leagueId=${team.leagueId}`,{
-                                    method: 'GET',
-                                    mode: 'cors'
-                                })
-                                    .then(response => response.json())
-                                    .then(data => {
-                                                        if(data.status=="success" && data.hasOwnProperty("teamInfo")){
-                                                            // Create a container for each team
-                                                            const teamContainer = document.createElement("div");
-                                                            teamContainer.classList.add("row")
-                                                            teamContainer.innerHTML = `
-                                                              <div class="col-md-9">
-                                                                Team Name:<b> ${data.teamInfo.team.name} </b>- 
-                                                                Country:<b> ${data.teamInfo.team.country} </b>- 
-                                                                Stadium:<b> ${data.teamInfo.venue.name}</b> 
-                                                              </div>
-                                                              <div class="col-md-1">
-                                                                <img src=${data.teamInfo.team.logo} width="20" height="30">
-                                                              </div>
-                                                              <div class="col-md-2">  
-                                                                <button class="btn btn-danger" onclick="removeTeam(${data.teamInfo.team.id})">Remove Team</button>
-                                                              </div>
-                                                            `;
-                                                            // Append the container to the main container
-                                                            document.getElementById("teamsContainer").appendChild(teamContainer);
-                                                        }
-                                    })
-                                    .catch(error => console.error("Error fetching team information:", error));
-                                }
-                        });
+            if(data.status!=="success" && data.hasOwnProperty("problem")){
+              alert(data.problem);
             }
+            // Loop through the array of teams and make a request for each team
+            else if (data.hasOwnProperty("result")){
+              data.result.forEach(team => {
+                if (team.hasOwnProperty("teamId") && team.hasOwnProperty("leagueId")){
+                    fetch(`http://localhost:5002/getTeamInfoById?teamId=${team.teamId}&leagueId=${team.leagueId}`,{
+                        method: 'GET',
+                        mode: 'cors'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                      if(data.status=="success" && data.hasOwnProperty("teamInfo")){
+                          // Create a container for each team
+                          const teamContainer = document.createElement("div");
+                          teamContainer.classList.add("row")
+                          teamContainer.innerHTML = `
+                            <div class="col-md-9">
+                              Team Name:<b> ${data.teamInfo.team.name} </b>- 
+                              Country:<b> ${data.teamInfo.team.country} </b>- 
+                              Stadium:<b> ${data.teamInfo.venue.name}</b> 
+                            </div>
+                            <div class="col-md-1">
+                              <img src=${data.teamInfo.team.logo} width="20" height="30">
+                            </div>
+                            <div class="col-md-2">  
+                              <button class="btn btn-danger" onclick="removeTeam(${data.teamInfo.team.id})">Remove Team</button>
+                            </div>
+                          `;
+                          // Append the container to the main container
+                          document.getElementById("teamsContainer").appendChild(teamContainer);
+                      }
+                    })
+                    .catch(error =>{console.log("Error fetching team information:"+error)} );
+                  }
+            });
+          }
             
-          })
-          .catch(error => console.error("Error fetching userTeamsOfInterest:", error));
+        })
+        .catch(error => console.log("Error fetching userTeamsOfInterest:"+error));
       }
       
       function removeTeam(id) {
       
-          fetch(`http://localhost:5002/removeTeamOfInterest`,{
+        fetch(`http://localhost:5002/removeTeamOfInterest`,{
           method: 'POST',
           mode: 'cors',
               headers:{
@@ -95,9 +98,12 @@
           .then( data => {
               if(data.status=="success"){
                 loadTeams();
+                alert(data.result);
               }
-              else{
-                  alert("something went wrong: " + JSON.stringify(data));
+              else if(data.hasOwnProperty("problem")){
+                alert(data.problem);
+              }else{
+                alert("something went wrong: " + JSON.stringify(data));
               }
           })
           .catch(error => console.error("Error trying to call the removing team function"))
@@ -114,8 +120,8 @@
             document.getElementById("leaguesAndTeams").innerHTML = "";
               // Loop through the array of teams and make a request for each team
               data.leagues.forEach(league => {
-                  // Create a container for each league
-                  const leagueContainer = document.createElement("div");
+                // Create a container for each league
+                const leagueContainer = document.createElement("div");
                 leagueContainer.classList.add("row")
                 leagueContainer.classList.add("leaguesContainer")
 
@@ -144,39 +150,39 @@
                 listTeamsContainer.style.display = "block";
             }
             else if (listTeamsContainer.style.display==="none"){
-                fetch(`http://localhost:5002/getTeamsByLeagueId?leagueId=${leagueId}`,{
-                    method: 'GET',
-                    mode: 'cors'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    data.teams.forEach(team=>{
-                        // Create a container for each team
-                        const teamContainer = document.createElement("div");
-                        teamContainer.classList.add("row")
-                        teamContainer.classList.add("teamContainer")
-                        teamContainer.innerHTML = 
-                        `
-                          <div class="col-md-8">
-                            <div class="row">
-                              <div class="col-md-8">
-                                Team: <b> ${team.name} </b> 
-                              </div>
-                              <div class="col-md-4">
-                                <img src=${team.logo} width="30" height="30">
-                              </div>
+              fetch(`http://localhost:5002/getTeamsByLeagueId?leagueId=${leagueId}`,{
+                  method: 'GET',
+                  mode: 'cors'
+              })
+              .then(response => response.json())
+              .then(data => {
+                  data.teams.forEach(team=>{
+                      // Create a container for each team
+                      const teamContainer = document.createElement("div");
+                      teamContainer.classList.add("row")
+                      teamContainer.classList.add("teamContainer")
+                      teamContainer.innerHTML = 
+                      `
+                        <div class="col-md-8">
+                          <div class="row">
+                            <div class="col-md-8">
+                              Team: <b> ${team.name} </b> 
+                            </div>
+                            <div class="col-md-4">
+                              <img src=${team.logo} width="30" height="30">
                             </div>
                           </div>
-                          <div class="col-md-4">
-                            <button class="btn btn-primary" onclick="addTeam(${team.id},${leagueId})">Add Team</button>
-                          </div>
-                        `;
-                        // Append the container to the main container
-                        listTeamsContainer.appendChild(teamContainer);
-                        listTeamsContainer.style.display = "block";
-                    })
-                })
-                .catch(error => console.error("Error fetching team information:", error));
+                        </div>
+                        <div class="col-md-4">
+                          <button class="btn btn-primary" onclick="addTeam(${team.id},${leagueId})">Add Team</button>
+                        </div>
+                      `;
+                      // Append the container to the main container
+                      listTeamsContainer.appendChild(teamContainer);
+                      listTeamsContainer.style.display = "block";
+                  })
+              })
+              .catch(error => console.error("Error fetching team information:", error));
             }
             else {
                     listTeamsContainer.style.display = "none";
@@ -199,22 +205,25 @@
           })
           .then(response => response.json())
           .then( data => {
-              if(data.status=="success"){
-                      loadTeams();
-                  }
-              else{
-                  alert("something went wrong: " + JSON.stringify(data));
-              }
+            console.log(data);
+            if(data.status!=="success" && data.hasOwnProperty("problem")){
+              alert(data.problem);
+            }
+            else if(data.status=="success"){
+              loadTeams();
+              alert(data.result);
+            }
+
           })
           .catch(error => console.error("Error trying to call the add team function"))
       }
 
-        function getCookie(name) {
-            const value = `; ${document.cookie}`;
-            const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) 
-                return parts.pop().split(';').shift();
-        }
+      function getCookie(name) {
+          const value = `; ${document.cookie}`;
+          const parts = value.split(`; ${name}=`);
+          if (parts.length === 2) 
+              return parts.pop().split(';').shift();
+      }
         
     </script>
 

@@ -35,8 +35,11 @@
       })
       .then(response => response.json())
       .then(data => {
-       if (data.status === "success"){
-          const matchesTable = document.getElementById("matchesTable");
+       if(data.status!=="success" && data.hasOwnProperty("problem")){
+        alert(data.problem);
+       }
+       else if (data.status === "success"){
+        const matchesTable = document.getElementById("matchesTable");
         const tableBody = document.getElementById("matchesTableBody");
       
         // Clear existing table rows
