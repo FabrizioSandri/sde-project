@@ -87,7 +87,7 @@ module.exports.getTeamInfoById = (req, res) => {
 };
 
 module.exports.getMatchesOfInterest = (req,res)=>{
-    if(!req.body.token){
+    if(req.body.token==='undefined'){
         return res.status(401).json({
             status:'error',
             problem:'token not provided'
