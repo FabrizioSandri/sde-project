@@ -104,9 +104,9 @@
       <h1 class="text-center">Matches of Interest</h1>
       <hr />
       <div class="row">
-        <form class="form-inline"id=" matchesForm" onsubmit="getMatches(); return false;">
-          <label class="sr-only" for="inlineFormInputNumberOfMatches">Number of matches</label>
-          <input type="number" min="1" max="40"  id="numberOfMatches" name="numberOfMatches" class="form-control mb-2 mr-sm-2" placeholder="3" required>
+        <form class="form-inline" id=" matchesForm" onsubmit="getMatches(); return false;">
+          <label for="numberOfMatches">Number of matches</label>
+          <input type="number" min="1" max="40"  id="numberOfMatches" name="numberOfMatches" class="form-control mb-2 mr-sm-2" placeholder="3" required style="margin-left: 3px">
           <button type="submit" class="btn btn-dark">Get Matches</button>
         </form>
       </div>
