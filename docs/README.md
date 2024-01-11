@@ -1089,7 +1089,7 @@ If the status code is `200`, the endpoint returns a JSON object adhering to the 
 
 </details>
 
-##### PLACE FORECAST
+##### Place forecast
 
 <details>
  <summary><code>GET</code> <code><b>/getTeams</b></code> <code>(Get the weather for a place (stadium) on a specific date)</code></summary>
