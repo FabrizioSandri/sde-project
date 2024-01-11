@@ -3,7 +3,11 @@ const axios = require('axios');
 const bodyParser = require('body-parser');
 const router = require('./routes/routes');
 
+let cors = require('cors')
+
 const app = express();
+
+app.use(cors());
 
 //body parser middleware
 app.use(bodyParser.json());

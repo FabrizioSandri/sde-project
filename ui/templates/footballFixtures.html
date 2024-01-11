@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Matches of Interest</title>
+   </head>
+   <body>
+      <h1>Matches of Interest</h1>
+      <form id="matchesForm" onsubmit="getMatches(); return false;">
+         <label for="numberOfMatches">Number of Matches:</label>
+         <input type="number" id="numberOfMatches" name="numberOfMatches" required>
+         <button type="submit">Get Matches</button>
+      </form>
+      <table border="1" id="matchesTable" style="display: none;">
+         <thead>
+            <tr>
+               <th>Home Team</th>
+               <th>Away Team</th>
+               <th>Date</th>
+               <th>City</th>
+               <th>Stadium</th>
+               <th>Weather</th>
+               <th>Max Temp</th>
+               <th>Min Temp</th>
+            </tr>
+         </thead>
+         <tbody id="matchesTableBody"></tbody>
+      </table>
+      <script>
+         function getMatches() {
+           const numberOfMatches = document.getElementById("numberOfMatches").value;
+         
+           // Make a POST request to localhost:5002/getMatchesOfInterest
+           fetch("http://localhost:5002/getMatchesOfInterest", {
+             method: "POST",
+             headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+             },
+             body: new URLSearchParams({
+               token: getCookie("token"),
+               numberOfMatches: numberOfMatches,
+             }),
+             json: true
+           })
+           .then(response => response.json())
+           .then(data => {
+              if (data.status === "success"){
+                  const matchesTable = document.getElementById("matchesTable");
+                const tableBody = document.getElementById("matchesTableBody");
+            
+                // Clear existing table rows
+                tableBody.innerHTML = "";
+            
+                // Populate the table with the new data
+                data.matches.forEach(match => {
+                  const row = document.createElement("tr");
+                  row.innerHTML = `
+                    <td>${match.homeTeam}</td>
+                    <td>${match.awayTeam}</td>
+                    <td>${dateFormatted(match.matchDate)}</td>
+                    <td>${match.city}</td>
+                    <td>${match.stadium}</td>
+                    <td>${match.weather.description}</td>
+                    <td>${match.weather.max_temp}</td>
+                    <td>${match.weather.min_temp}</td>
+                  `;
+                  tableBody.appendChild(row);
+                });
+            
+                // Display the table
+                matchesTable.style.display = "table";
+                }else{
+                  alert("Something went wrong: "+ JSON.stringify(data))
+                }
+              }
+            )
+           .catch(error => console.error("Error fetching data:", error));
+         }
+         
+         
+          function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+          }
+          
+            
+
+          function dateFormatted(dateString){
+            const dateObject = new Date(dateString);
+            const options = {
+              year: "numeric",
+              month: "numeric",
+              day: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+              hour12: false, // Use 24-hour format
+              timeZone: "Europe/Rome" // Set the timezone to Italian timezone
+            };
+
+            const formattedDate = dateObject.toLocaleString("it-IT", options);
+            return formattedDate;
+          }
+      </script>
+   </body>
+</html>

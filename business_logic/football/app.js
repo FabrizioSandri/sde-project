@@ -27,7 +27,7 @@ app.get('/getLeaguesAvailable',(req,res)=>{
   .catch(error => {
     return res.status(400).json({
       status:'error',
-      msg: error.response
+      msg: error
     })
   });
 })
@@ -53,7 +53,7 @@ app.get('/getTeamsOfLeague',(req,res)=>{
   .catch(error => {
     return res.status(400).json({
       status:'error',
-      msg: error.response
+      msg: error
     })
   });
 })
@@ -79,7 +79,7 @@ app.get('/getTeamInfo',(req,res)=>{
   .catch(error => {
     return res.status(400).json({
       status:'error',
-      msg: error.response
+      msg: error
     })
   });
 })
@@ -108,7 +108,7 @@ app.post('/getInfoMatches', (req, res) => {
     .catch(error => {
       return res.status(400).json({
         status: 'error',
-        msg: error.response
+        msg: error
       })
     });
 });
@@ -150,6 +150,7 @@ function filterLeaguesInfo(leaguesInfo){
   for (let i = 0; i < leaguesInfo.length; i++) {
     if (leaguesInfo[i].hasOwnProperty("country") &&  leaguesInfo[i].hasOwnProperty("seasons")) {
       delete leaguesInfo[i]["seasons"];
+      leaguesInfo[i]["league"]["country"]=leaguesInfo[i]["country"].name;
       delete leaguesInfo[i]["country"];
       leaguesInfo[i]=leaguesInfo[i].league;
     }

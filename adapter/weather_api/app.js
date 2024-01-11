@@ -3,8 +3,8 @@ const axios = require('axios');
 
 const app = express();
 
-app.get('/getWeather',(req,res)=>{
-    if (!req.query.lat || ! req.query.lon){
+app.get('/getWeather',(req,res)=>{  
+  if (!req.query.lat || !req.query.lon){
       return res.status(400).json({
           status:'error',
           msg:'one or more coordinates are missing'
@@ -23,18 +23,18 @@ app.get('/getWeather',(req,res)=>{
         'X-RapidAPI-Host': 'weatherbit-v1-mashape.p.rapidapi.com'
       }
     };
-    
-      axios.request(options)
-      .then((result)=>{
-        res.status(200).json({
-          status:"success",
-          data: result.data
-        })
+    axios.request(options)
+    .then((result)=>{
+      console.log(result.toString());
+      return res.status(200).json({
+        status:"success",
+        data: result.data
       })
-      .catch((err)=>{
-        return res.status(400).json({
-          status: 'error',
-          msg: err
+    })
+    .catch((err)=>{
+      return res.status(400).json({
+        status: 'error',
+        msg: err
       })
     });  
   })

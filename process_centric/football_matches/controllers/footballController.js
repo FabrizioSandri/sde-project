@@ -17,7 +17,7 @@ module.exports.getLeagues = (req, res) => {
     .catch(error => {
         return res.status(400).json({
             status:'error',
-            msg: error.response
+            msg: error.response.data
         })
     });
 };
@@ -48,7 +48,7 @@ module.exports.getTeamsByLeagueId = (req, res) => {
     .catch(error => {
         res.status(400).json({
             status:'error',
-            msg: error.response
+            msg: error.response.data
         })
     });
 };
@@ -81,7 +81,7 @@ module.exports.getTeamInfoById = (req, res) => {
     .catch(error => {
         res.status(400).json({
             status:'error',
-            msg: error.response
+            msg: error.response.data
         })
     });
 };
@@ -148,14 +148,14 @@ module.exports.getMatchesOfInterest = (req,res)=>{
                 } catch (error) {
                     return res.status(400).json({
                         status: 'error',
-                        msg: error.response
+                        msg: error
                     });
                 }
             }
         } catch (error) {
             return res.status(400).json({
                 status: 'error',
-                msg: error.response
+                msg: error
             });
         }
         
@@ -167,7 +167,7 @@ module.exports.getMatchesOfInterest = (req,res)=>{
     .catch(error=>{
         return res.status(400).json({
             status: "error",
-            msg: error.response
+            msg: error
         });
     })
 

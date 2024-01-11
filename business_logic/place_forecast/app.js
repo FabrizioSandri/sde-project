@@ -27,7 +27,6 @@ app.get('/getWeatherMatches', (req, res) => {
     };
     axios.request(options_stackpoint)
     .then((result)=>{
-      
       if (!result.data.data.latitude || !result.data.data.longitude){
         return res.status(400).json({
           status: "error",
@@ -53,17 +52,19 @@ app.get('/getWeatherMatches', (req, res) => {
         });
       })
       .catch((error)=>{
+        console.log("error at weather retriving"+error);
         return res.status(400).json({
           status: 'error',
-          msg: error.response
+          msg: error
         });
       });
 
     })
     .catch((error)=>{
+      console.log(error);
       return res.status(400).json({
         status: 'error',
-        msg: error.response
+        msg: error
       });
     });
   })
@@ -79,6 +80,7 @@ app.listen(PORT, () => {
 function filterWeatherForecast(forecasts, date){
 
   const truncatedDate = (date.toString()).slice(0, 10);
+  console.log("data:"+truncatedDate)
   for (const forecast of forecasts){
     if( forecast.datetime == truncatedDate){
       return {

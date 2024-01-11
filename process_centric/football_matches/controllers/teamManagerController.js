@@ -25,7 +25,7 @@ module.exports.userTeamsOfInterest = (req,res)=>{
     .catch(error=>{
         return res.status(400).json({
             status: "error",
-            msg: error.response
+            msg: error
         })
     })
 };
@@ -63,12 +63,13 @@ module.exports.addTeamOfInterest = (req,res)=>{
     .catch(error=>{
         return res.status(400).json({
             status: "error",
-            msg: error.response 
+            msg: error
         })
     })
 };
 
 module.exports.removeTeamOfInterest = (req,res)=>{
+    console.log(req.body);
     if(!req.body.token){
         return res.status(401).json({
             status:'error',
@@ -97,10 +98,10 @@ module.exports.removeTeamOfInterest = (req,res)=>{
             result: response.data.msg
         });
     })
-    .catch(error=>{
+    .catch(error=>{        
         return res.status(400).json({
             status: "error",
-            msg: error.response
+            msg: error
         })
     })
 };

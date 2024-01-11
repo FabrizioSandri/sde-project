@@ -28,5 +28,13 @@ def registration():
 def news():    
     return render_template("news.html")
 
+@app.route('/manageTeams')
+def manageTeams():    
+    return render_template("manageTeams.html")
+
+@app.route('/footballFixtures')
+def footballFixtures():    
+    return render_template("footballFixtures.html")
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=os.environ['UI_PORT'])

@@ -29,7 +29,7 @@ app.get('/getLeagues', (req, res) => {
       })
     })
     .catch(error => {
-      return res.status(200).json({
+      return res.status(400).json({
         status:'error',
         msg: error
       })
@@ -39,7 +39,7 @@ app.get('/getLeagues', (req, res) => {
 
   app.get('/getTeams', (req, res) => {
     if (!req.query.leagueId){
-        return res.status(200).json({
+        return res.status(400).json({
             status:'error',
             msg:'league value is mising'
         });
@@ -64,7 +64,7 @@ app.get('/getLeagues', (req, res) => {
       })
     })
     .catch(error => {
-      return res.status(200).json({
+      return res.status(400).json({
         status:'error',
         msg: error
       })
@@ -74,7 +74,7 @@ app.get('/getLeagues', (req, res) => {
   app.get('/getTeamInfoById', (req, res) => {
     const {leagueId, teamId} = req.query;
     if (!leagueId || !teamId){
-        return res.status(200).json({
+        return res.status(400).json({
             status:'error',
             msg:'league or tema ID value is mising'
         });
@@ -102,7 +102,7 @@ app.get('/getLeagues', (req, res) => {
       })
     })
     .catch(error => {
-      return res.status(200).json({
+      return res.status(400).json({
         status:'error',
         msg: error
       })
@@ -115,7 +115,7 @@ app.get('/getLeagues', (req, res) => {
     const teamIds=req.body.teamIds;
     let resp = '';
     if (!teamIds){
-        return res.status(200).json({
+        return res.status(400).json({
             status:'error',
             msg:'team Ids value are mising'
         });
@@ -138,7 +138,7 @@ app.get('/getLeagues', (req, res) => {
         resp = await axios.request(options);
         data.push(resp.data.response)
       } catch (error) {
-        return res.status(200).json({
+        return res.status(400).json({
           status:'error',
           msg: error
         })
