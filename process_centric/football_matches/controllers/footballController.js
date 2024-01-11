@@ -90,7 +90,7 @@ module.exports.getMatchesOfInterest = (req,res)=>{
     if(!req.body.token){
         return res.status(401).json({
             status:'error',
-            msg:'token not provided'
+            problem:'token not provided'
         });
     }
 

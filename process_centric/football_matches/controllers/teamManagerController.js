@@ -4,7 +4,7 @@ module.exports.userTeamsOfInterest = (req,res)=>{
     if(!req.query.token){
         return res.status(401).json({
             status:'error',
-            msg:'token not provided'
+            problem:'token not provided'
         });
     }
     let db_endpoint = `http://db_adapter:${process.env.DB_ADAPTER_SERVER_PORT}/getTeams`;
@@ -34,7 +34,7 @@ module.exports.addTeamOfInterest = (req,res)=>{
     if(!req.body.token){
         return res.status(401).json({
             status:'error',
-            msg:'token not provided'
+            problem: 'token not provided'
         });
     }
     if(!req.body.teamId || !req.body.leagueId){
@@ -72,7 +72,7 @@ module.exports.removeTeamOfInterest = (req,res)=>{
     if(!req.body.token){
         return res.status(401).json({
             status:'error',
-            msg:'token not provided'
+            problem:'token not provided'
         });
     }
     if( !req.body.teamId ){
