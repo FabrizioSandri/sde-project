@@ -499,7 +499,7 @@ If the status code is `200`, the endpoint returns a JSON object adhering to the 
 > | http code     | content-type                      | response                                                            |
 > |---------------|-----------------------------------|---------------------------------------------------------------------|
 > | `200`         | `application/json`	 	             | JSON object, see Example                                            |
-> | `200`         | `application/json` 		             | `{status: "error", msg: ".. error msg .. "}`                        |
+> | `400`         | `application/json` 		             | `{status: "error", msg: ".. error msg .. "}`                        |
 
 ##### Example
 If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
@@ -534,7 +534,7 @@ If the status code is `200`, the endpoint returns a JSON object adhering to the 
 > | http code     | content-type                      | response                                                            |
 > |---------------|-----------------------------------|---------------------------------------------------------------------|
 > | `200`         | `application/json`                | JSON object, see Example                                            |
-> | `200`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+> | `400`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
 
 ##### Example
 If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
@@ -570,7 +570,7 @@ If the status code is `200`, the endpoint returns a JSON object adhering to the 
 > | http code     | content-type                      | response                                                            |
 > |---------------|-----------------------------------|---------------------------------------------------------------------|
 > | `200`         | `application/json`                | JSON object, see Example                                            |
-> | `200`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+> | `400`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
 
 ##### Example
 If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
@@ -603,7 +603,7 @@ If the status code is `200`, the endpoint returns a JSON object adhering to the 
 > | http code     | content-type                      | response                                                            |
 > |---------------|-----------------------------------|---------------------------------------------------------------------|
 > | `200`         | `application/json`                | JSON object, see Example                                            |
-> | `200`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+> | `400`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
 
 ##### Example
 If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
@@ -1051,7 +1051,6 @@ If the status code is `200`, the endpoint returns a JSON object adhering to the 
 > |---------------|-----------------------------------|---------------------------------------------------------------------|
 > | `200`         | `application/json`                | JSON object, see Example                                            |
 > | `400`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
-> | `401`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
 
 ##### Example
 If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
@@ -1454,8 +1453,7 @@ If the status code is `200`, the endpoint returns a JSON object adhering to the 
 > |---------------|-----------------------------------|---------------------------------------------------------------------|
 > | `200`         | `application/json`                | JSON object, see Example                                            |
 > | `400`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
-> | `401`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
-
+> | `401`         | `application/json` 		             | `{status: "error", problem: "token not provided"}`                  |    
 ##### Example
 If the status code is `200` and the search parameter is empty, all the news will be returned. Otherwise, the service will respond with the 
 10 news most similar to the search criteria.
@@ -1497,8 +1495,7 @@ In the first case the returned json will be as follow:
 > |---------------|-----------------------------------|---------------------------------------------------------------------|
 > | `200`         | `application/json`                | `{status: "success", msg: "team added"}`                            |
 > | `400`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
-> | `401`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
-
+> | `401`         | `application/json` 		             | `{status: "error", problem: "token not provided"}`                  |      
 </details>
 
 <details>
@@ -1518,7 +1515,7 @@ In the first case the returned json will be as follow:
 > |---------------|-----------------------------------|---------------------------------------------------------------------|
 > | `200`         | `application/json`                | `{status: "success", msg: "team deleted"}`                          |
 > | `400`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
-> | `401`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+> | `401`         | `application/json` 		             | `{status: "error", problem: "token not provided"}`                  |
 
 </details>
 
@@ -1638,7 +1635,7 @@ If the status code is `200`, the endpoint returns a JSON object adhering to the 
 > |---------------|-----------------------------------|---------------------------------------------------------------------|
 > | `200`         | `application/json`                | JSON object, see Example                                            |
 > | `400`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
-> | `401`         | `application/json`                | `{status: "error", msg: ".. error msg .. "}`                        |
+> | `401`         | `application/json`                | `{status: "error", problem: "token not provided"}`                  |
 
 ##### Example
 If the status code is `200`, the endpoint returns a JSON object adhering to the following syntax.
