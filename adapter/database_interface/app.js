@@ -44,8 +44,9 @@ app.get('/findUser', (req, res) => {
     });
   }
   
-  let query = `SELECT * FROM users WHERE email="${email}" AND password=SHA1("${password}");`;
-  pool.query(query, (err, data) => {
+  let query = 'SELECT * FROM users WHERE email = ? AND password = SHA1(?)';
+  let values = [email, password];
+  pool.query(query, values, (err, data) => {
     if (err){
       return res.status(400).json({
         status: "error",
